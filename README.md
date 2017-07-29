@@ -2,7 +2,7 @@
 
 A typing game based on Missile Command.
 
-![http://www.google.com](Live Link)
+[live link](https://adamjacobson.github.io/Abort-Missile/)
 
 ## Background
 
@@ -24,6 +24,8 @@ In the game, the following features will be available
 - Once all lives are lost, the game is over. User will be shown their final score and prompted to play again.
 
 ## Wireframes
+
+![overview](https://github.com/AdamJacobson/Abort-Missile/blob/master/docs/wireframes/overview.png)
 
 ## Technologies and Architecture
 

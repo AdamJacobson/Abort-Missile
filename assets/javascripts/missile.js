@@ -1,8 +1,10 @@
+import randomWordByLength from './random_words';
+
 class Missile {
   constructor(screenWidth) {
     this.x = Math.random() * (screenWidth - 50) + 25;
     this.y = 0;
-    this.code = "Missile"; // Eventually randomly generated code
+    this.code = randomWordByLength(4);
 
     this.height = 50;
     this.width = 10;

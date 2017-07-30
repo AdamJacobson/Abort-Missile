@@ -20,12 +20,14 @@
           <button id="button-instructions" type="button" name="button">Instructions</button>
           <button id="button-play-pause" type="button" name="button">Start Game</button>
         </div>
-        
+
         <canvas id="canvas" width="700" height="500"></canvas>
         <div class="bottom-row">
-          <span class="score">0</span>
-          <input id="code-entry" type="text" name="" value=""></input>
-          <div class="lives">
+          <div class="score _25">0</div>
+          <div class="_50">
+            <input id="code-entry" type="text" name="" value=""></input>
+          </div>
+          <div class="lives _25">
             Lives:
             <i class="fa fa-building-o" aria-hidden="true"></i>
             <i class="fa fa-building-o" aria-hidden="true"></i>
@@ -33,7 +35,16 @@
           </div>
         </div>
       </div>
+    </div>
 
+    <div id="instructions-modal" class="modal">
+
+      <div id="mask" class="mask">
+        <div class="modal-content">
+          <h1>Instructions</h1>
+          <button id="close-modal" type="button" name="button">Close</button>
+        </div>
+      </div>
     </div>
 
   </body>

@@ -68,9 +68,70 @@
 /************************************************************************/
 /******/ ([
 /* 0 */
-/***/ (function(module, exports) {
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
-console.log("loaded");
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__game__ = __webpack_require__(1);
+
+
+document.addEventListener('DOMContentLoaded', () => {
+  console.log("loaded");
+  const game = new __WEBPACK_IMPORTED_MODULE_0__game__["a" /* default */];
+  setupButtons(game);
+  game.start();
+});
+
+const setupButtons = (game) => {
+  document.getElementById('button-instructions').addEventListener('click', () => {
+    console.log("Click instructions");
+    document.getElementById('instructions-modal').classList.add('show');
+    game.pause();
+  });
+
+  document.getElementById('button-play-pause').addEventListener('click', () => {
+    console.log("Click play/pause");
+    game.unpause();
+  });
+
+  document.getElementById('close-modal').addEventListener('click', () => {
+    document.getElementById('instructions-modal').classList.remove('show');
+  });
+
+  document.getElementById('mask').addEventListener('click', (e) => {
+    if (e.target === e.currentTarget) {
+      document.getElementById('instructions-modal').classList.remove('show');
+    }
+  });
+};
+
+
+/***/ }),
+/* 1 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+class Game {
+  constructor() {
+    this.score = 0;
+    this.lives = 3;
+    this.wave = 1;
+  }
+
+  start() {
+    console.log("Game started");
+  }
+
+  pause() {
+    console.log("Game paused");
+  }
+
+  unpause() {
+    console.log("Game unpaused");
+  }
+}
+
+/* harmony default export */ __webpack_exports__["a"] = (Game);
 
 
 /***/ })

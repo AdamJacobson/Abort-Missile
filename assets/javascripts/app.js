@@ -1,11 +1,47 @@
 import Game from './game';
 
 document.addEventListener('DOMContentLoaded', () => {
-  console.log("loaded");
   const game = new Game;
   setupButtons(game);
   game.start();
+
+  // setupGame();
+
+  animate();
 });
+
+// const setupGame = () => {
+//   const stage = new createjs.Stage("canvas");
+//   const circle = new createjs.Shape();
+//   circle.graphics.beginFill("DeepSkyBlue").drawCircle(0, 0, 50);
+//   circle.x = 100;
+//   circle.y = 100;
+//   stage.addChild(circle);
+//   stage.update();
+// };
+
+function animate() {
+  window.requestAnimationFrame(draw);
+}
+
+function draw() {
+  let canvas = document.getElementById('canvas');
+  let ctx = canvas.getContext('2d');
+
+  ctx.globalCompositeOperation = 'destination-over';
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  // ctx.save();
+
+  var gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
+  gradient.addColorStop(0, 'black');
+  gradient.addColorStop(1, 'blue');
+  ctx.fillStyle = gradient;
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  window.requestAnimationFrame(draw);
+}
+
 
 const setupButtons = (game) => {
   document.getElementById('button-instructions').addEventListener('click', () => {

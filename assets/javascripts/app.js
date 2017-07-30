@@ -48,6 +48,11 @@ function draw(game) {
   game.missiles.forEach((m) => {
     ctx.fillRect(m.x, m.y, m.width, m.height);
 
+    ctx.fillStyle = "white";
+    ctx.font = '20px serif';
+    ctx.textAlign="center"; 
+    ctx.fillText(m.code, m.x, m.y + m.height + 18);
+
     m.fall();
 
     if (m.didImpact(canvas.height)) {

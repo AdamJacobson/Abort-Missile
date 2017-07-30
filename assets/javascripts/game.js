@@ -10,16 +10,46 @@ class Game {
     this.screenHeight = screenHeight;
 
     this.missiles = [];
+
+    this.gameLoop = null;
+
+    this.paused = false;
+  }
+
+  enterCode(key) {
+    if (key === "Enter" || key === ' ') {
+      let entry = document.getElementById('code-entry');
+      console.log("Entered code: " + entry.value);
+
+      this.fireCode(entry.value);
+
+      entry.value = "";
+    }
+  }
+
+  fireCode(code) {
+    this.missiles.forEach((missile) => {
+      if (code === missile.code) {
+        this.destroy(missile);
+      } else {
+        console.log(`entered code '${code}' didn't match '${missile.code}'`);
+      }
+    });
   }
 
   impact(missile) {
     this.removeMissile(missile);
     console.log("Missile has impacted");
+
+    this.lives--;
+    this.checkGameOver();
   }
 
   destroy(missile) {
     this.removeMissile(missile);
-    console.log("Missile was destroyed");
+    console.log(`Missile '${missile.code}' was destroyed`);
+
+    this.score += missile.points;
   }
 
   removeMissile(missile) {
@@ -31,17 +61,37 @@ class Game {
 
   start() {
     console.log("Game started");
-    setInterval(() => {
-      this.missiles.push(new Missile(this.screenWidth));
+    this.gameLoop = setInterval(() => {
+      const missile = new Missile(this.screenWidth);
+      this.missiles.push(missile);
+      // setInterval(() => missile.fall(), 25);
+      missile.startFalling();
     }, 3000);
   }
 
   pause() {
+    // this.paused = true;
+    // this.missiles.forEach((missile) => missile.pauseFalling());
     console.log("Game paused");
   }
 
   unpause() {
+    // this.paused = false;
+    // this.missiles.forEach((missile) => missile.startFalling());
     console.log("Game unpaused");
+  }
+
+  checkGameOver() {
+    if (this.lives <= 0) {
+      this.gameOver();
+    }
+  }
+
+  gameOver() {
+    clearInterval(this.gameLoop);
+    this.missiles = [];
+    console.log("Game Over. Final score: " + this.score);
+
   }
 }
 

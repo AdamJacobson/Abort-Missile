@@ -42,8 +42,7 @@ function draw(game) {
   ctx.fillStyle = gradient;
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  // Missile
-
+  // Missiles
   game.missiles.forEach((m) => {
     ctx.fillStyle = "gray";
     ctx.fillRect(m.x, m.y, m.width, m.height);
@@ -53,37 +52,44 @@ function draw(game) {
     ctx.textAlign="center";
     ctx.fillText(m.code, m.x, m.y + m.height + 18);
 
-    m.fall();
+    // m.fall();
 
     if (m.didImpact(canvas.height)) {
       game.impact(m);
     }
   });
 
-
-  window.requestAnimationFrame(() => draw(game));
+  // if (!game.paused) {
+    window.requestAnimationFrame(() => draw(game));
+  // }
 }
 
 
 const setupButtons = (game) => {
   document.getElementById('button-instructions').addEventListener('click', () => {
-    console.log("Click instructions");
-    document.getElementById('instructions-modal').classList.add('show');
     game.pause();
+    console.log("Clicked instructions");
+    document.getElementById('instructions-modal').classList.add('show');
   });
 
   document.getElementById('button-play-pause').addEventListener('click', () => {
-    console.log("Click play/pause");
+    console.log("Clicked play/pause");
     game.unpause();
   });
 
   document.getElementById('close-modal').addEventListener('click', () => {
+    game.unpause();
     document.getElementById('instructions-modal').classList.remove('show');
   });
 
   document.getElementById('mask').addEventListener('click', (e) => {
     if (e.target === e.currentTarget) {
+      game.unpause();
       document.getElementById('instructions-modal').classList.remove('show');
     }
   });
+
+  document.getElementById('code-entry').addEventListener('keypress', (e => {
+    game.enterCode(e.key);
+  }));
 };

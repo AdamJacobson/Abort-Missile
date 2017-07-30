@@ -114,8 +114,7 @@ function draw(game) {
   ctx.fillStyle = gradient;
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  // Missile
-
+  // Missiles
   game.missiles.forEach((m) => {
     ctx.fillStyle = "gray";
     ctx.fillRect(m.x, m.y, m.width, m.height);
@@ -125,39 +124,46 @@ function draw(game) {
     ctx.textAlign="center";
     ctx.fillText(m.code, m.x, m.y + m.height + 18);
 
-    m.fall();
+    // m.fall();
 
     if (m.didImpact(canvas.height)) {
       game.impact(m);
     }
   });
 
-
-  window.requestAnimationFrame(() => draw(game));
+  // if (!game.paused) {
+    window.requestAnimationFrame(() => draw(game));
+  // }
 }
 
 
 const setupButtons = (game) => {
   document.getElementById('button-instructions').addEventListener('click', () => {
-    console.log("Click instructions");
-    document.getElementById('instructions-modal').classList.add('show');
     game.pause();
+    console.log("Clicked instructions");
+    document.getElementById('instructions-modal').classList.add('show');
   });
 
   document.getElementById('button-play-pause').addEventListener('click', () => {
-    console.log("Click play/pause");
+    console.log("Clicked play/pause");
     game.unpause();
   });
 
   document.getElementById('close-modal').addEventListener('click', () => {
+    game.unpause();
     document.getElementById('instructions-modal').classList.remove('show');
   });
 
   document.getElementById('mask').addEventListener('click', (e) => {
     if (e.target === e.currentTarget) {
+      game.unpause();
       document.getElementById('instructions-modal').classList.remove('show');
     }
   });
+
+  document.getElementById('code-entry').addEventListener('keypress', (e => {
+    game.enterCode(e.key);
+  }));
 };
 
 
@@ -179,16 +185,46 @@ class Game {
     this.screenHeight = screenHeight;
 
     this.missiles = [];
+
+    this.gameLoop = null;
+
+    this.paused = false;
+  }
+
+  enterCode(key) {
+    if (key === "Enter" || key === ' ') {
+      let entry = document.getElementById('code-entry');
+      console.log("Entered code: " + entry.value);
+
+      this.fireCode(entry.value);
+
+      entry.value = "";
+    }
+  }
+
+  fireCode(code) {
+    this.missiles.forEach((missile) => {
+      if (code === missile.code) {
+        this.destroy(missile);
+      } else {
+        console.log(`entered code '${code}' didn't match '${missile.code}'`);
+      }
+    });
   }
 
   impact(missile) {
     this.removeMissile(missile);
     console.log("Missile has impacted");
+
+    this.lives--;
+    this.checkGameOver();
   }
 
   destroy(missile) {
     this.removeMissile(missile);
-    console.log("Missile was destroyed");
+    console.log(`Missile '${missile.code}' was destroyed`);
+
+    this.score += missile.points;
   }
 
   removeMissile(missile) {
@@ -200,17 +236,37 @@ class Game {
 
   start() {
     console.log("Game started");
-    setInterval(() => {
-      this.missiles.push(new __WEBPACK_IMPORTED_MODULE_0__missile__["a" /* default */](this.screenWidth));
+    this.gameLoop = setInterval(() => {
+      const missile = new __WEBPACK_IMPORTED_MODULE_0__missile__["a" /* default */](this.screenWidth);
+      this.missiles.push(missile);
+      // setInterval(() => missile.fall(), 25);
+      missile.startFalling();
     }, 3000);
   }
 
   pause() {
+    // this.paused = true;
+    // this.missiles.forEach((missile) => missile.pauseFalling());
     console.log("Game paused");
   }
 
   unpause() {
+    // this.paused = false;
+    // this.missiles.forEach((missile) => missile.startFalling());
     console.log("Game unpaused");
+  }
+
+  checkGameOver() {
+    if (this.lives <= 0) {
+      this.gameOver();
+    }
+  }
+
+  gameOver() {
+    clearInterval(this.gameLoop);
+    this.missiles = [];
+    console.log("Game Over. Final score: " + this.score);
+
   }
 }
 
@@ -230,9 +286,23 @@ class Missile {
     this.x = Math.random() * (screenWidth - 50) + 25;
     this.y = 0;
     this.code = Object(__WEBPACK_IMPORTED_MODULE_0__random_words__["a" /* default */])(4);
+    this.points = 100;
 
     this.height = 50;
     this.width = 10;
+
+    this.fallSpeed = 50;
+    this.fallInterval = null;
+
+    this.startFalling();
+  }
+
+  startFalling() {
+    this.fallInterval = setInterval(() => this.fall(), this.fallSpeed);
+  }
+
+  pauseFalling() {
+    clearInterval(this.fallInterval);
   }
 
   didImpact(screenHeight) {

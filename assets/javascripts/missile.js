@@ -5,9 +5,23 @@ class Missile {
     this.x = Math.random() * (screenWidth - 50) + 25;
     this.y = 0;
     this.code = randomWordByLength(4);
+    this.points = 100;
 
     this.height = 50;
     this.width = 10;
+
+    this.fallSpeed = 50;
+    this.fallInterval = null;
+
+    this.startFalling();
+  }
+
+  startFalling() {
+    this.fallInterval = setInterval(() => this.fall(), this.fallSpeed);
+  }
+
+  pauseFalling() {
+    clearInterval(this.fallInterval);
   }
 
   didImpact(screenHeight) {

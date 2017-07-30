@@ -1,0 +1,51 @@
+html {
+  font-family: "Exo 2", sans-serif;
+  font-size: 24px;
+}
+
+h1 {
+  font-size: 36px;
+}
+
+canvas {
+  border: 5px ridge;
+  margin: 20px;
+}
+
+input {
+  width: 300px;
+  border: 2px solid;
+}
+
+button {
+  border: 1px solid;
+  border-radius: 0;
+  font-size: 18px;
+  margin: 0 5px;
+}
+
+.game {
+  margin: 10px;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+}
+
+.buttons-row {
+  display: flex;
+  justify-content: center;
+}
+
+.bottom-row {
+  font-size: 30px;
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  justify-content: space-between;
+  padding: 5px 20px;
+  box-sizing: border-box;
+}

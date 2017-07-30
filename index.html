@@ -2,9 +2,39 @@
 <html>
   <head>
     <meta charset="utf-8">
+    <link href="https://fonts.googleapis.com/css?family=Exo+2:400,700" rel="stylesheet">
+    <script type="text/javascript" src="bundle.js">
+    </script>
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+    <link rel="stylesheet" href="./assets/stylesheets/reset.css">
+    <link rel="stylesheet" href="./assets/stylesheets/style.css">
     <title>Abort Missile!</title>
   </head>
   <body>
-    <h1>Abort Missile!</h1>
+
+    <div class="content">
+      <h1>Abort Missile!</h1>
+
+      <div class="game">
+        <div class="buttons-row">
+          <button id="button-instructions" type="button" name="button">Instructions</button>
+          <button id="button-play-pause" type="button" name="button">Start Game</button>
+        </div>
+        
+        <canvas id="canvas" width="700" height="500"></canvas>
+        <div class="bottom-row">
+          <span class="score">0</span>
+          <input id="code-entry" type="text" name="" value=""></input>
+          <div class="lives">
+            Lives:
+            <i class="fa fa-building-o" aria-hidden="true"></i>
+            <i class="fa fa-building-o" aria-hidden="true"></i>
+            <i class="fa fa-building-o" aria-hidden="true"></i>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
   </body>
 </html>

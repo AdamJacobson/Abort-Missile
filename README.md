@@ -6,9 +6,9 @@ A typing game based on Missile Command.
 
 ## Background
 
-Missile Command is an old game which involves shooting down missiles before they hit the ground, destroying the players city in the process. There are several modern incarnations.
+_Missile Command_ is an old game which involves shooting down missiles before they hit the ground, destroying the players city in the process. There are several modern incarnations.
 
-_Abort Missile!_ requires the player to type a certain word in order to cause an incoming missile to self-destruct.
+In _Abort Missile!_ the player must type words which match the self-destruct codes of incoming missiles.
 
 The player withstand only 3 strikes before the game ends. The game is played in waves with a certain number of missiles coming in each one and the words required to abort them getting longer each time.
 
@@ -30,7 +30,7 @@ In the game, the following features will be available
 ## Technologies and Architecture
 
 - Vanilla JavaScript for structure. jQuery for DOM manipulation.
-- Some canvas library maybe. Not sure yet.
+- HTML5 vanilla canvas with no libraries.
 - Webpack to bundle javascript files.
 
 The following script files will be needed:
@@ -47,12 +47,12 @@ A missile should be a self contained object and element on the screen. Rendering
 
 **Day 1 (Sat)**: Decide on any technologies required. Setup project on GitHub. Render basic page to GH-Pages site.
 
-**Day 2 (Sun)**:
+**Day 2 (Sun)**: Get basic game functionality: rendering game, missile spawning, impact and destructions. Game over detection.
 
-**Day 3 (Mon)**:
+**Day 3 (Mon)**: Scoring and lives updating on change
 
-**Day 4 (Tue)**:
+**Day 4 (Tue)**: Background graphics, missiles and explosions.
 
-**Day 5 (Wed)**:
+**Day 5 (Wed)**: Waves and increasing difficulty.
 
 **Day 6 (Thu)**:

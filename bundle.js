@@ -73,13 +73,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 document.addEventListener('DOMContentLoaded', () => {
-  const game = new __WEBPACK_IMPORTED_MODULE_0__game__["a" /* default */];
+  const game = new __WEBPACK_IMPORTED_MODULE_0__game__["a" /* default */](700, 500);
   setupButtons(game);
   game.start();
 
   // setupGame();
 
-  animate();
+  animate(game);
 });
 
 // const setupGame = () => {
@@ -92,26 +92,39 @@ document.addEventListener('DOMContentLoaded', () => {
 //   stage.update();
 // };
 
-function animate() {
-  window.requestAnimationFrame(draw);
+function animate(game) {
+  window.requestAnimationFrame(() => draw(game));
 }
 
-function draw() {
+function draw(game) {
+  // console.log("x: " + game.missile.x);
+
   let canvas = document.getElementById('canvas');
   let ctx = canvas.getContext('2d');
 
-  ctx.globalCompositeOperation = 'destination-over';
+  // ctx.globalCompositeOperation = 'destination-over';
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
   // ctx.save();
 
-  var gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
+  // Background
+  let gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
   gradient.addColorStop(0, 'black');
   gradient.addColorStop(1, 'blue');
   ctx.fillStyle = gradient;
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  window.requestAnimationFrame(draw);
+  // Missile
+  ctx.fillStyle = "red";
+  ctx.fillRect(game.missile.x, game.missile.y, 10, 50);
+
+  if (game.missile.y >= game.screenHeight) {
+    game.missile.impact();
+  }
+
+  game.missile.fall();
+
+  window.requestAnimationFrame(() => draw(game));
 }
 
 
@@ -144,11 +157,19 @@ const setupButtons = (game) => {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__missile__ = __webpack_require__(2);
+
+
 class Game {
-  constructor() {
+  constructor(screenWidth, screenHeight) {
     this.score = 0;
     this.lives = 3;
     this.wave = 1;
+
+    this.screenWidth = screenWidth;
+    this.screenHeight = screenHeight;
+
+    this.missile = new __WEBPACK_IMPORTED_MODULE_0__missile__["a" /* default */](screenWidth);
   }
 
   start() {
@@ -165,6 +186,30 @@ class Game {
 }
 
 /* harmony default export */ __webpack_exports__["a"] = (Game);
+
+
+/***/ }),
+/* 2 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+class Missile {
+  constructor(screenWidth) {
+    this.x = Math.random() * (screenWidth - 50) + 25;
+    this.y = 0;
+    this.code = "Missile"; // Eventually randomly generated code
+  }
+
+  fall() {
+    this.y++;
+  }
+
+  impact() {
+    console.log("Missile has impacted");
+  }
+}
+
+/* harmony default export */ __webpack_exports__["a"] = (Missile);
 
 
 /***/ })

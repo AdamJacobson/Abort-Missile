@@ -1,13 +1,13 @@
 import Game from './game';
 
 document.addEventListener('DOMContentLoaded', () => {
-  const game = new Game;
+  const game = new Game(700, 500);
   setupButtons(game);
   game.start();
 
   // setupGame();
 
-  animate();
+  animate(game);
 });
 
 // const setupGame = () => {
@@ -20,26 +20,39 @@ document.addEventListener('DOMContentLoaded', () => {
 //   stage.update();
 // };
 
-function animate() {
-  window.requestAnimationFrame(draw);
+function animate(game) {
+  window.requestAnimationFrame(() => draw(game));
 }
 
-function draw() {
+function draw(game) {
+  // console.log("x: " + game.missile.x);
+
   let canvas = document.getElementById('canvas');
   let ctx = canvas.getContext('2d');
 
-  ctx.globalCompositeOperation = 'destination-over';
+  // ctx.globalCompositeOperation = 'destination-over';
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
   // ctx.save();
 
-  var gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
+  // Background
+  let gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
   gradient.addColorStop(0, 'black');
   gradient.addColorStop(1, 'blue');
   ctx.fillStyle = gradient;
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  window.requestAnimationFrame(draw);
+  // Missile
+  ctx.fillStyle = "red";
+  ctx.fillRect(game.missile.x, game.missile.y, 10, 50);
+
+  if (game.missile.y >= game.screenHeight) {
+    game.missile.impact();
+  }
+
+  game.missile.fall();
+
+  window.requestAnimationFrame(() => draw(game));
 }
 
 

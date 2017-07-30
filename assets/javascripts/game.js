@@ -1,8 +1,15 @@
+import Missile from './missile';
+
 class Game {
-  constructor() {
+  constructor(screenWidth, screenHeight) {
     this.score = 0;
     this.lives = 3;
     this.wave = 1;
+
+    this.screenWidth = screenWidth;
+    this.screenHeight = screenHeight;
+
+    this.missile = new Missile(screenWidth);
   }
 
   start() {

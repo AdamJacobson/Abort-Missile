@@ -115,14 +115,24 @@ function draw(game) {
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
   // Missile
-  ctx.fillStyle = "red";
-  ctx.fillRect(game.missile.x, game.missile.y, 10, 50);
+  ctx.fillStyle = "gray";
 
-  if (game.missile.y >= game.screenHeight) {
-    game.missile.impact();
-  }
+  game.missiles.forEach((m) => {
+    ctx.fillRect(m.x, m.y, m.width, m.height);
 
-  game.missile.fall();
+    m.fall();
+
+    if (m.didImpact(canvas.height)) {
+      game.impact();
+    }
+  });
+
+
+  // if (game.missile.didImpact(canvas.height)) {
+  //   game.impact();
+  // }
+  //
+  // game.missile.fall();
 
   window.requestAnimationFrame(() => draw(game));
 }
@@ -169,7 +179,12 @@ class Game {
     this.screenWidth = screenWidth;
     this.screenHeight = screenHeight;
 
-    this.missile = new __WEBPACK_IMPORTED_MODULE_0__missile__["a" /* default */](screenWidth);
+    this.missiles = [new __WEBPACK_IMPORTED_MODULE_0__missile__["a" /* default */](screenWidth)];
+  }
+
+  impact() {
+    this.missiles[0].impact();
+    this.missiles = [];
   }
 
   start() {
@@ -198,6 +213,13 @@ class Missile {
     this.x = Math.random() * (screenWidth - 50) + 25;
     this.y = 0;
     this.code = "Missile"; // Eventually randomly generated code
+
+    this.height = 50;
+    this.width = 10;
+  }
+
+  didImpact(screenHeight) {
+    return this.y + this.height >= screenHeight;
   }
 
   fall() {

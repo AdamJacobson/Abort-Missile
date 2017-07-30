@@ -43,14 +43,24 @@ function draw(game) {
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
   // Missile
-  ctx.fillStyle = "red";
-  ctx.fillRect(game.missile.x, game.missile.y, 10, 50);
+  ctx.fillStyle = "gray";
 
-  if (game.missile.y >= game.screenHeight) {
-    game.missile.impact();
-  }
+  game.missiles.forEach((m) => {
+    ctx.fillRect(m.x, m.y, m.width, m.height);
 
-  game.missile.fall();
+    m.fall();
+
+    if (m.didImpact(canvas.height)) {
+      game.impact();
+    }
+  });
+
+
+  // if (game.missile.didImpact(canvas.height)) {
+  //   game.impact();
+  // }
+  //
+  // game.missile.fall();
 
   window.requestAnimationFrame(() => draw(game));
 }

@@ -9,7 +9,12 @@ class Game {
     this.screenWidth = screenWidth;
     this.screenHeight = screenHeight;
 
-    this.missile = new Missile(screenWidth);
+    this.missiles = [new Missile(screenWidth)];
+  }
+
+  impact() {
+    this.missiles[0].impact();
+    this.missiles = [];
   }
 
   start() {

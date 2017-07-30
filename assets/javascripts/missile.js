@@ -13,7 +13,7 @@ class Missile {
   }
 
   fall() {
-    this.y++;
+    this.y += 1.5;
   }
 
   impact() {

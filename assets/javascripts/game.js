@@ -9,16 +9,31 @@ class Game {
     this.screenWidth = screenWidth;
     this.screenHeight = screenHeight;
 
-    this.missiles = [new Missile(screenWidth)];
+    this.missiles = [];
   }
 
-  impact() {
-    this.missiles[0].impact();
-    this.missiles = [];
+  impact(missile) {
+    this.removeMissile(missile);
+    console.log("Missile has impacted");
+  }
+
+  destroy(missile) {
+    this.removeMissile(missile);
+    console.log("Missile was destroyed");
+  }
+
+  removeMissile(missile) {
+    const idx = this.missiles.indexOf(missile);
+    if (idx > -1) {
+      this.missiles.splice(idx, 1);
+    }
   }
 
   start() {
     console.log("Game started");
+    setInterval(() => {
+      this.missiles.push(new Missile(this.screenWidth));
+    }, 3000);
   }
 
   pause() {

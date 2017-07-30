@@ -43,29 +43,23 @@ function draw(game) {
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
   // Missile
-  ctx.fillStyle = "gray";
 
   game.missiles.forEach((m) => {
+    ctx.fillStyle = "gray";
     ctx.fillRect(m.x, m.y, m.width, m.height);
 
     ctx.fillStyle = "white";
     ctx.font = '20px serif';
-    ctx.textAlign="center"; 
+    ctx.textAlign="center";
     ctx.fillText(m.code, m.x, m.y + m.height + 18);
 
     m.fall();
 
     if (m.didImpact(canvas.height)) {
-      game.impact();
+      game.impact(m);
     }
   });
 
-
-  // if (game.missile.didImpact(canvas.height)) {
-  //   game.impact();
-  // }
-  //
-  // game.missile.fall();
 
   window.requestAnimationFrame(() => draw(game));
 }

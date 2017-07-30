@@ -115,29 +115,23 @@ function draw(game) {
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
   // Missile
-  ctx.fillStyle = "gray";
 
   game.missiles.forEach((m) => {
+    ctx.fillStyle = "gray";
     ctx.fillRect(m.x, m.y, m.width, m.height);
 
     ctx.fillStyle = "white";
     ctx.font = '20px serif';
-    ctx.textAlign="center"; 
+    ctx.textAlign="center";
     ctx.fillText(m.code, m.x, m.y + m.height + 18);
 
     m.fall();
 
     if (m.didImpact(canvas.height)) {
-      game.impact();
+      game.impact(m);
     }
   });
 
-
-  // if (game.missile.didImpact(canvas.height)) {
-  //   game.impact();
-  // }
-  //
-  // game.missile.fall();
 
   window.requestAnimationFrame(() => draw(game));
 }
@@ -184,16 +178,31 @@ class Game {
     this.screenWidth = screenWidth;
     this.screenHeight = screenHeight;
 
-    this.missiles = [new __WEBPACK_IMPORTED_MODULE_0__missile__["a" /* default */](screenWidth)];
+    this.missiles = [];
   }
 
-  impact() {
-    this.missiles[0].impact();
-    this.missiles = [];
+  impact(missile) {
+    this.removeMissile(missile);
+    console.log("Missile has impacted");
+  }
+
+  destroy(missile) {
+    this.removeMissile(missile);
+    console.log("Missile was destroyed");
+  }
+
+  removeMissile(missile) {
+    const idx = this.missiles.indexOf(missile);
+    if (idx > -1) {
+      this.missiles.splice(idx, 1);
+    }
   }
 
   start() {
     console.log("Game started");
+    setInterval(() => {
+      this.missiles.push(new __WEBPACK_IMPORTED_MODULE_0__missile__["a" /* default */](this.screenWidth));
+    }, 3000);
   }
 
   pause() {
@@ -228,7 +237,7 @@ class Missile {
   }
 
   fall() {
-    this.y++;
+    this.y += 1.5;
   }
 
   impact() {

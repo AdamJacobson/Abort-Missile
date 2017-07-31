@@ -704,10 +704,15 @@ const sample = values => {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__stages__ = __webpack_require__(5);
+
+
 let canvas, ctx, rocket, city, game;
-const font = "'Exo 2'";
 const buildingIcon = '\uf0f7';
 
+const defaultFont = "Exo 2";
+const font = (size) => {
+  return `${size}px '${defaultFont}'`;
+};
 
 function animate(g) {
   game = g;
@@ -770,13 +775,13 @@ const renderPauseScreen = () => {
 
   ctx.fillStyle = "white";
   ctx.textAlign = "center";
-  ctx.font = `50px ${font}`;
+  ctx.font = font(50);
   ctx.fillText("Game Paused", game.screenWidth / 2, 100);
 
-  ctx.font = `30px ${font}`;
+  ctx.font = font(30);
   ctx.fillText("Instructions", game.screenWidth / 2, 160);
 
-  ctx.font = `20px ${font}`;
+  ctx.font = font(20);
   ctx.fillText("Type the word which appears next to the missile", game.screenWidth / 2, 200);
   ctx.fillText("Press ENTER or SPACE to send the word", game.screenWidth / 2, 225);
   ctx.fillText("Press any key to resume the game", game.screenWidth / 2, game.screenHeight - 100);
@@ -787,14 +792,14 @@ const renderGameOverScreen = () => {
 
   ctx.fillStyle = "white";
   ctx.textAlign = "center";
-  ctx.font = `50px ${font}`;
+  ctx.font = font(50);
   ctx.fillText("Game Over", game.screenWidth / 2, 100);
 
-  ctx.font = `30px ${font}`;
+  ctx.font = font(30);
   ctx.fillText("Final Score: " + game.score, game.screenWidth / 2, 160);
   ctx.fillText("Wave: " + game.wave, game.screenWidth / 2, 200);
 
-  ctx.font = `20px ${font}`;
+  ctx.font = font(20);
   ctx.fillText("Press any key to play again", game.screenWidth / 2, 250);
 };
 
@@ -803,7 +808,7 @@ const renderMissiles = () => {
     ctx.drawImage(rocket, m.x - 10, m.y - 35);
 
     ctx.fillStyle = "black";
-    ctx.font = `20px ${font}`;
+    ctx.font = font(20);
     ctx.textAlign = "center";
     ctx.fillText(m.code, m.x, m.y + m.height + 18);
 
@@ -824,7 +829,7 @@ const renderCode = () => {
 };
 
 const renderScore = () => {
-  ctx.font = `20px ${font}`;
+  ctx.font = font(20);
   ctx.textAlign = "left";
   ctx.fillStyle = "black";
   ctx.fillText(game.score, 0 + 50, game.screenHeight - 10);

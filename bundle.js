@@ -226,14 +226,14 @@ class Game {
 class Missile {
   constructor(screenWidth) {
     this.x = Math.random() * (screenWidth - 50) + 25;
-    this.y = 0;
+    this.y = -90; // start off the screen
     this.code = Object(__WEBPACK_IMPORTED_MODULE_0__random_words__["a" /* default */])(4);
     this.points = 100;
 
     this.height = 50;
     this.width = 10;
 
-    this.fallSpeed = 50;
+    this.fallSpeed = 25;
     this.fallInterval = null;
 
     this.startFalling();
@@ -252,7 +252,7 @@ class Missile {
   }
 
   fall() {
-    this.y += 1.5;
+    this.y += 1;
   }
 
   impact() {
@@ -654,20 +654,34 @@ const sample = values => {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-let canvas;
-let ctx;
+let canvas, ctx, rocket;
+const buildingIcon = '\uf0f7';
 
 function animate(game) {
-  window.requestAnimationFrame(() => draw(game));
-
   canvas = document.getElementById('canvas');
   ctx = canvas.getContext('2d');
+
+  rocket = document.getElementById('rocket');
+  window.requestAnimationFrame(() => draw(game));
 }
 
 function draw(game) {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
   renderBackground(game);
+
+  // rocket = document.getElementById('rocket');
+  // let rocket = new Image();
+  // rocket.src = "https://mdn.mozillademos.org/files/5397/rhino.jpg";
+
+  // if(rocket.complete) {
+    // ctx.drawImage(rocket, 0, 0, 50, 100);
+  // } else {
+  //   rocket.onLoad = function() {
+  //     ctx.drawImage(rocket, 0, 0);
+  //     console.log("rocket loaded");
+  //   };
+  // }
 
   renderMissiles(game);
 
@@ -680,12 +694,11 @@ function draw(game) {
 
 const renderMissiles = (game) => {
   game.missiles.forEach((m) => {
-    ctx.fillStyle = "gray";
-    ctx.fillRect(m.x, m.y, m.width, m.height);
+    ctx.drawImage(rocket, m.x - 10, m.y - 35);
 
     ctx.fillStyle = "white";
     ctx.font = '20px serif';
-    ctx.textAlign="center";
+    ctx.textAlign = "center";
     ctx.fillText(m.code, m.x, m.y + m.height + 18);
 
     if (m.didImpact(canvas.height)) {
@@ -716,12 +729,12 @@ const renderScore = (game) => {
 };
 
 const renderLives = (game) => {
-  ctx.font='20px FontAwesome';
+  ctx.font = '20px FontAwesome';
   ctx.fillStyle = "white";
-  ctx.textAlign="left";
+  ctx.textAlign = "left";
   let life = 0;
   while (life < game.lives) {
-    ctx.fillText('\uf0f7',game.screenWidth - 100 + (life * 30), game.screenHeight - 10);
+    ctx.fillText(buildingIcon, game.screenWidth - 100 + (life * 30), game.screenHeight - 10);
     life++;
   }
 };

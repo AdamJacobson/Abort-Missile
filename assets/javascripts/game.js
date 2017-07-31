@@ -14,6 +14,23 @@ class Game {
     this.gameLoop = null;
 
     this.paused = false;
+
+    this.code = "";
+  }
+
+  sendKey(e) {
+    const keyCode = e.which;
+
+    if (keyCode === 27) { // Escape
+      // pause game
+    } else if (keyCode === 13 || keyCode === 32) { // enter || space
+      this.fireCode(this.code);
+      this.code = "";
+    } else if (keyCode === 8) { // backspace
+      this.code = this.code.slice(0, this.code.length - 1);
+    } else if (keyCode >= 65 && keyCode <= 90) {
+      this.code += e.key;
+    }
   }
 
   enterCode(key) {
@@ -31,8 +48,6 @@ class Game {
     this.missiles.forEach((missile) => {
       if (code === missile.code) {
         this.destroy(missile);
-      } else {
-        console.log(`entered code '${code}' didn't match '${missile.code}'`);
       }
     });
   }

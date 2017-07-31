@@ -131,11 +131,38 @@ function draw(game) {
     }
   });
 
+  renderCode(game, ctx);
+  renderLives(game, ctx);
+  renderScore(game, ctx);
+
   // if (!game.paused) {
     window.requestAnimationFrame(() => draw(game));
   // }
 }
 
+const renderCode = (game, ctx) => {
+  ctx.fillStyle = "white";
+  ctx.textAlign = "center";
+  ctx.fillText(game.code, game.screenWidth / 2, game.screenHeight - 10);
+};
+
+const renderScore = (game, ctx) => {
+  ctx.font = '20px serif';
+  ctx.textAlign = "left";
+  ctx.fillStyle = "white";
+  ctx.fillText(game.score, 0 + 50, game.screenHeight - 10);
+};
+
+const renderLives = (game, ctx) => {
+  ctx.font='20px FontAwesome';
+  ctx.fillStyle = "white";
+  ctx.textAlign="left";
+  let life = 0;
+  while (life < game.lives) {
+    ctx.fillText('\uf0f7',game.screenWidth - 100 + (life * 20), game.screenHeight - 10);
+    life++;
+  }
+};
 
 const setupButtons = (game) => {
   document.getElementById('button-instructions').addEventListener('click', () => {
@@ -161,9 +188,13 @@ const setupButtons = (game) => {
     }
   });
 
-  document.getElementById('code-entry').addEventListener('keypress', (e => {
-    game.enterCode(e.key);
-  }));
+  // document.getElementById('code-entry').addEventListener('keypress', (e) => {
+  //   game.enterCode(e.key);
+  // });
+
+  document.getElementsByTagName('body')[0].addEventListener('keydown', (e) => {
+    game.sendKey(e);
+  });
 };
 
 
@@ -189,6 +220,23 @@ class Game {
     this.gameLoop = null;
 
     this.paused = false;
+
+    this.code = "";
+  }
+
+  sendKey(e) {
+    const keyCode = e.which;
+
+    if (keyCode === 27) { // Escape
+      // pause game
+    } else if (keyCode === 13 || keyCode === 32) { // enter || space
+      this.fireCode(this.code);
+      this.code = "";
+    } else if (keyCode === 8) { // backspace
+      this.code = this.code.slice(0, this.code.length - 1);
+    } else if (keyCode >= 65 && keyCode <= 90) {
+      this.code += e.key;
+    }
   }
 
   enterCode(key) {
@@ -206,8 +254,6 @@ class Game {
     this.missiles.forEach((missile) => {
       if (code === missile.code) {
         this.destroy(missile);
-      } else {
-        console.log(`entered code '${code}' didn't match '${missile.code}'`);
       }
     });
   }

@@ -59,11 +59,38 @@ function draw(game) {
     }
   });
 
+  renderCode(game, ctx);
+  renderLives(game, ctx);
+  renderScore(game, ctx);
+
   // if (!game.paused) {
     window.requestAnimationFrame(() => draw(game));
   // }
 }
 
+const renderCode = (game, ctx) => {
+  ctx.fillStyle = "white";
+  ctx.textAlign = "center";
+  ctx.fillText(game.code, game.screenWidth / 2, game.screenHeight - 10);
+};
+
+const renderScore = (game, ctx) => {
+  ctx.font = '20px serif';
+  ctx.textAlign = "left";
+  ctx.fillStyle = "white";
+  ctx.fillText(game.score, 0 + 50, game.screenHeight - 10);
+};
+
+const renderLives = (game, ctx) => {
+  ctx.font='20px FontAwesome';
+  ctx.fillStyle = "white";
+  ctx.textAlign="left";
+  let life = 0;
+  while (life < game.lives) {
+    ctx.fillText('\uf0f7',game.screenWidth - 100 + (life * 20), game.screenHeight - 10);
+    life++;
+  }
+};
 
 const setupButtons = (game) => {
   document.getElementById('button-instructions').addEventListener('click', () => {
@@ -89,7 +116,11 @@ const setupButtons = (game) => {
     }
   });
 
-  document.getElementById('code-entry').addEventListener('keypress', (e => {
-    game.enterCode(e.key);
-  }));
+  // document.getElementById('code-entry').addEventListener('keypress', (e) => {
+  //   game.enterCode(e.key);
+  // });
+
+  document.getElementsByTagName('body')[0].addEventListener('keydown', (e) => {
+    game.sendKey(e);
+  });
 };

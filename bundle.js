@@ -73,96 +73,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 document.addEventListener('DOMContentLoaded', () => {
-  const game = new __WEBPACK_IMPORTED_MODULE_0__game__["a" /* default */](700, 500);
+  const game = new __WEBPACK_IMPORTED_MODULE_0__game__["a" /* default */](500, 600);
   setupButtons(game);
   game.start();
-
-  // setupGame();
-
-  animate(game);
 });
-
-// const setupGame = () => {
-//   const stage = new createjs.Stage("canvas");
-//   const circle = new createjs.Shape();
-//   circle.graphics.beginFill("DeepSkyBlue").drawCircle(0, 0, 50);
-//   circle.x = 100;
-//   circle.y = 100;
-//   stage.addChild(circle);
-//   stage.update();
-// };
-
-function animate(game) {
-  window.requestAnimationFrame(() => draw(game));
-}
-
-function draw(game) {
-  // console.log("x: " + game.missile.x);
-
-  let canvas = document.getElementById('canvas');
-  let ctx = canvas.getContext('2d');
-
-  // ctx.globalCompositeOperation = 'destination-over';
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-  // ctx.save();
-
-  // Background
-  let gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
-  gradient.addColorStop(0, 'black');
-  gradient.addColorStop(1, 'blue');
-  ctx.fillStyle = gradient;
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-  // Missiles
-  game.missiles.forEach((m) => {
-    ctx.fillStyle = "gray";
-    ctx.fillRect(m.x, m.y, m.width, m.height);
-
-    ctx.fillStyle = "white";
-    ctx.font = '20px serif';
-    ctx.textAlign="center";
-    ctx.fillText(m.code, m.x, m.y + m.height + 18);
-
-    // m.fall();
-
-    if (m.didImpact(canvas.height)) {
-      game.impact(m);
-    }
-  });
-
-  renderCode(game, ctx);
-  renderLives(game, ctx);
-  renderScore(game, ctx);
-
-  // if (!game.paused) {
-    window.requestAnimationFrame(() => draw(game));
-  // }
-}
-
-const renderCode = (game, ctx) => {
-  ctx.fillStyle = "white";
-  ctx.textAlign = "center";
-  ctx.fillText(game.code, game.screenWidth / 2, game.screenHeight - 10);
-};
-
-const renderScore = (game, ctx) => {
-  ctx.font = '20px serif';
-  ctx.textAlign = "left";
-  ctx.fillStyle = "white";
-  ctx.fillText(game.score, 0 + 50, game.screenHeight - 10);
-};
-
-const renderLives = (game, ctx) => {
-  ctx.font='20px FontAwesome';
-  ctx.fillStyle = "white";
-  ctx.textAlign="left";
-  let life = 0;
-  while (life < game.lives) {
-    ctx.fillText('\uf0f7',game.screenWidth - 100 + (life * 20), game.screenHeight - 10);
-    life++;
-  }
-};
 
 const setupButtons = (game) => {
   document.getElementById('button-instructions').addEventListener('click', () => {
@@ -188,10 +102,6 @@ const setupButtons = (game) => {
     }
   });
 
-  // document.getElementById('code-entry').addEventListener('keypress', (e) => {
-  //   game.enterCode(e.key);
-  // });
-
   document.getElementsByTagName('body')[0].addEventListener('keydown', (e) => {
     game.sendKey(e);
   });
@@ -204,6 +114,8 @@ const setupButtons = (game) => {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__missile__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__animate__ = __webpack_require__(4);
+
 
 
 class Game {
@@ -222,6 +134,8 @@ class Game {
     this.paused = false;
 
     this.code = "";
+
+    Object(__WEBPACK_IMPORTED_MODULE_1__animate__["a" /* default */])(this);
   }
 
   sendKey(e) {
@@ -239,17 +153,6 @@ class Game {
     }
   }
 
-  enterCode(key) {
-    if (key === "Enter" || key === ' ') {
-      let entry = document.getElementById('code-entry');
-      console.log("Entered code: " + entry.value);
-
-      this.fireCode(entry.value);
-
-      entry.value = "";
-    }
-  }
-
   fireCode(code) {
     this.missiles.forEach((missile) => {
       if (code === missile.code) {
@@ -260,24 +163,18 @@ class Game {
 
   impact(missile) {
     this.removeMissile(missile);
-    console.log("Missile has impacted");
-
     this.lives--;
     this.checkGameOver();
   }
 
   destroy(missile) {
     this.removeMissile(missile);
-    console.log(`Missile '${missile.code}' was destroyed`);
-
     this.score += missile.points;
   }
 
   removeMissile(missile) {
     const idx = this.missiles.indexOf(missile);
-    if (idx > -1) {
-      this.missiles.splice(idx, 1);
-    }
+    this.missiles = this.missiles.slice(0, idx).concat(this.missiles.slice(idx + 1));
   }
 
   start() {
@@ -285,7 +182,6 @@ class Game {
     this.gameLoop = setInterval(() => {
       const missile = new __WEBPACK_IMPORTED_MODULE_0__missile__["a" /* default */](this.screenWidth);
       this.missiles.push(missile);
-      // setInterval(() => missile.fall(), 25);
       missile.startFalling();
     }, 3000);
   }
@@ -751,6 +647,86 @@ const sample = values => {
 // module.exports = words;
 // // Export the word list as it is often useful
 // words.wordList = wordList;
+
+
+/***/ }),
+/* 4 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+let canvas;
+let ctx;
+
+function animate(game) {
+  window.requestAnimationFrame(() => draw(game));
+
+  canvas = document.getElementById('canvas');
+  ctx = canvas.getContext('2d');
+}
+
+function draw(game) {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  renderBackground(game);
+
+  renderMissiles(game);
+
+  renderCode(game);
+  renderLives(game);
+  renderScore(game);
+
+  window.requestAnimationFrame(() => draw(game));
+}
+
+const renderMissiles = (game) => {
+  game.missiles.forEach((m) => {
+    ctx.fillStyle = "gray";
+    ctx.fillRect(m.x, m.y, m.width, m.height);
+
+    ctx.fillStyle = "white";
+    ctx.font = '20px serif';
+    ctx.textAlign="center";
+    ctx.fillText(m.code, m.x, m.y + m.height + 18);
+
+    if (m.didImpact(canvas.height)) {
+      game.impact(m);
+    }
+  });
+};
+
+const renderBackground = (game) => {
+  let gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
+  gradient.addColorStop(0, 'black');
+  gradient.addColorStop(1, 'blue');
+  ctx.fillStyle = gradient;
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+};
+
+const renderCode = (game) => {
+  ctx.fillStyle = "white";
+  ctx.textAlign = "center";
+  ctx.fillText(game.code, game.screenWidth / 2, game.screenHeight - 10);
+};
+
+const renderScore = (game) => {
+  ctx.font = '20px serif';
+  ctx.textAlign = "left";
+  ctx.fillStyle = "white";
+  ctx.fillText(game.score, 0 + 50, game.screenHeight - 10);
+};
+
+const renderLives = (game) => {
+  ctx.font='20px FontAwesome';
+  ctx.fillStyle = "white";
+  ctx.textAlign="left";
+  let life = 0;
+  while (life < game.lives) {
+    ctx.fillText('\uf0f7',game.screenWidth - 100 + (life * 30), game.screenHeight - 10);
+    life++;
+  }
+};
+
+/* harmony default export */ __webpack_exports__["a"] = (animate);
 
 
 /***/ })

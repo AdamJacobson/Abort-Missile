@@ -1,96 +1,10 @@
 import Game from './game';
 
 document.addEventListener('DOMContentLoaded', () => {
-  const game = new Game(700, 500);
+  const game = new Game(500, 600);
   setupButtons(game);
   game.start();
-
-  // setupGame();
-
-  animate(game);
 });
-
-// const setupGame = () => {
-//   const stage = new createjs.Stage("canvas");
-//   const circle = new createjs.Shape();
-//   circle.graphics.beginFill("DeepSkyBlue").drawCircle(0, 0, 50);
-//   circle.x = 100;
-//   circle.y = 100;
-//   stage.addChild(circle);
-//   stage.update();
-// };
-
-function animate(game) {
-  window.requestAnimationFrame(() => draw(game));
-}
-
-function draw(game) {
-  // console.log("x: " + game.missile.x);
-
-  let canvas = document.getElementById('canvas');
-  let ctx = canvas.getContext('2d');
-
-  // ctx.globalCompositeOperation = 'destination-over';
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-  // ctx.save();
-
-  // Background
-  let gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
-  gradient.addColorStop(0, 'black');
-  gradient.addColorStop(1, 'blue');
-  ctx.fillStyle = gradient;
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-  // Missiles
-  game.missiles.forEach((m) => {
-    ctx.fillStyle = "gray";
-    ctx.fillRect(m.x, m.y, m.width, m.height);
-
-    ctx.fillStyle = "white";
-    ctx.font = '20px serif';
-    ctx.textAlign="center";
-    ctx.fillText(m.code, m.x, m.y + m.height + 18);
-
-    // m.fall();
-
-    if (m.didImpact(canvas.height)) {
-      game.impact(m);
-    }
-  });
-
-  renderCode(game, ctx);
-  renderLives(game, ctx);
-  renderScore(game, ctx);
-
-  // if (!game.paused) {
-    window.requestAnimationFrame(() => draw(game));
-  // }
-}
-
-const renderCode = (game, ctx) => {
-  ctx.fillStyle = "white";
-  ctx.textAlign = "center";
-  ctx.fillText(game.code, game.screenWidth / 2, game.screenHeight - 10);
-};
-
-const renderScore = (game, ctx) => {
-  ctx.font = '20px serif';
-  ctx.textAlign = "left";
-  ctx.fillStyle = "white";
-  ctx.fillText(game.score, 0 + 50, game.screenHeight - 10);
-};
-
-const renderLives = (game, ctx) => {
-  ctx.font='20px FontAwesome';
-  ctx.fillStyle = "white";
-  ctx.textAlign="left";
-  let life = 0;
-  while (life < game.lives) {
-    ctx.fillText('\uf0f7',game.screenWidth - 100 + (life * 20), game.screenHeight - 10);
-    life++;
-  }
-};
 
 const setupButtons = (game) => {
   document.getElementById('button-instructions').addEventListener('click', () => {
@@ -115,10 +29,6 @@ const setupButtons = (game) => {
       document.getElementById('instructions-modal').classList.remove('show');
     }
   });
-
-  // document.getElementById('code-entry').addEventListener('keypress', (e) => {
-  //   game.enterCode(e.key);
-  // });
 
   document.getElementsByTagName('body')[0].addEventListener('keydown', (e) => {
     game.sendKey(e);

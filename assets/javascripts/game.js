@@ -1,4 +1,5 @@
 import Missile from './missile';
+import animate from './animate';
 
 class Game {
   constructor(screenWidth, screenHeight) {
@@ -16,6 +17,8 @@ class Game {
     this.paused = false;
 
     this.code = "";
+
+    animate(this);
   }
 
   sendKey(e) {
@@ -33,17 +36,6 @@ class Game {
     }
   }
 
-  enterCode(key) {
-    if (key === "Enter" || key === ' ') {
-      let entry = document.getElementById('code-entry');
-      console.log("Entered code: " + entry.value);
-
-      this.fireCode(entry.value);
-
-      entry.value = "";
-    }
-  }
-
   fireCode(code) {
     this.missiles.forEach((missile) => {
       if (code === missile.code) {
@@ -54,24 +46,18 @@ class Game {
 
   impact(missile) {
     this.removeMissile(missile);
-    console.log("Missile has impacted");
-
     this.lives--;
     this.checkGameOver();
   }
 
   destroy(missile) {
     this.removeMissile(missile);
-    console.log(`Missile '${missile.code}' was destroyed`);
-
     this.score += missile.points;
   }
 
   removeMissile(missile) {
     const idx = this.missiles.indexOf(missile);
-    if (idx > -1) {
-      this.missiles.splice(idx, 1);
-    }
+    this.missiles = this.missiles.slice(0, idx).concat(this.missiles.slice(idx + 1));
   }
 
   start() {
@@ -79,7 +65,6 @@ class Game {
     this.gameLoop = setInterval(() => {
       const missile = new Missile(this.screenWidth);
       this.missiles.push(missile);
-      // setInterval(() => missile.fall(), 25);
       missile.startFalling();
     }, 3000);
   }

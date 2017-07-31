@@ -13,15 +13,25 @@ class Missile {
     this.fallSpeed = 25;
     this.fallInterval = null;
 
+    this.paused = false;
+
     this.startFalling();
   }
 
   startFalling() {
-    this.fallInterval = setInterval(() => this.fall(), this.fallSpeed);
+    this.fallInterval = setInterval(() => {
+      if (!this.paused) {
+        this.fall();
+      }
+    }, this.fallSpeed);
   }
 
-  pauseFalling() {
-    clearInterval(this.fallInterval);
+  pause() {
+    this.paused = true;
+  }
+  
+  unpause() {
+    this.paused = false;
   }
 
   didImpact(screenHeight) {

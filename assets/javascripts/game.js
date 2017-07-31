@@ -1,14 +1,17 @@
 import Missile from './missile';
 import animate from './animate';
+import * as Stages from './stages';
 
 class Game {
-  constructor(screenWidth, screenHeight) {
+  constructor() {
     this.score = 0;
     this.lives = 3;
     this.wave = 1;
 
-    this.screenWidth = screenWidth;
-    this.screenHeight = screenHeight;
+    const canvas = document.getElementById('canvas');
+
+    this.screenWidth = canvas.width;
+    this.screenHeight = canvas.height;
 
     this.missiles = [];
 
@@ -18,6 +21,8 @@ class Game {
 
     this.code = "";
 
+    this.stage = Stages.NOT_STARTED;
+
     animate(this);
   }
 
@@ -25,7 +30,11 @@ class Game {
     const keyCode = e.which;
 
     if (keyCode === 27) { // Escape
-      // pause game
+      if (this.stage === Stages.PAUSED) {
+        this.unpause();
+      } else {
+        this.pause();
+      }
     } else if (keyCode === 13 || keyCode === 32) { // enter || space
       this.fireCode(this.code);
       this.code = "";
@@ -61,23 +70,29 @@ class Game {
   }
 
   start() {
+    this.stage = Stages.PLAYING;
+
     console.log("Game started");
     this.gameLoop = setInterval(() => {
-      const missile = new Missile(this.screenWidth);
-      this.missiles.push(missile);
-      missile.startFalling();
+      if (!this.paused) {
+        const missile = new Missile(this.screenWidth);
+        this.missiles.push(missile);
+        missile.startFalling();
+      }
     }, 3000);
   }
 
   pause() {
-    // this.paused = true;
-    // this.missiles.forEach((missile) => missile.pauseFalling());
+    this.stage = Stages.PAUSED;
+    this.paused = true;
+    this.missiles.forEach((missile) => missile.pause());
     console.log("Game paused");
   }
 
   unpause() {
-    // this.paused = false;
-    // this.missiles.forEach((missile) => missile.startFalling());
+    this.stage = Stages.PLAYING;
+    this.paused = false;
+    this.missiles.forEach((missile) => missile.unpause());
     console.log("Game unpaused");
   }
 
@@ -88,6 +103,7 @@ class Game {
   }
 
   gameOver() {
+    this.stage = Stages.WAVE_LOST;
     clearInterval(this.gameLoop);
     this.missiles = [];
     console.log("Game Over. Final score: " + this.score);

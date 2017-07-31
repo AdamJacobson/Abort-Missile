@@ -1,7 +1,7 @@
 import Game from './game';
 
 document.addEventListener('DOMContentLoaded', () => {
-  const game = new Game(500, 600);
+  const game = new Game();
   setupButtons(game);
   game.start();
 });

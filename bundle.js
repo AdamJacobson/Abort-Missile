@@ -73,7 +73,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 document.addEventListener('DOMContentLoaded', () => {
-  const game = new __WEBPACK_IMPORTED_MODULE_0__game__["a" /* default */](500, 600);
+  const game = new __WEBPACK_IMPORTED_MODULE_0__game__["a" /* default */]();
   setupButtons(game);
   game.start();
 });
@@ -115,17 +115,21 @@ const setupButtons = (game) => {
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__missile__ = __webpack_require__(2);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__animate__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__stages__ = __webpack_require__(5);
+
 
 
 
 class Game {
-  constructor(screenWidth, screenHeight) {
+  constructor() {
     this.score = 0;
     this.lives = 3;
     this.wave = 1;
 
-    this.screenWidth = screenWidth;
-    this.screenHeight = screenHeight;
+    const canvas = document.getElementById('canvas');
+
+    this.screenWidth = canvas.width;
+    this.screenHeight = canvas.height;
 
     this.missiles = [];
 
@@ -135,6 +139,8 @@ class Game {
 
     this.code = "";
 
+    this.stage = __WEBPACK_IMPORTED_MODULE_2__stages__["a" /* NOT_STARTED */];
+
     Object(__WEBPACK_IMPORTED_MODULE_1__animate__["a" /* default */])(this);
   }
 
@@ -142,7 +148,11 @@ class Game {
     const keyCode = e.which;
 
     if (keyCode === 27) { // Escape
-      // pause game
+      if (this.stage === __WEBPACK_IMPORTED_MODULE_2__stages__["b" /* PAUSED */]) {
+        this.unpause();
+      } else {
+        this.pause();
+      }
     } else if (keyCode === 13 || keyCode === 32) { // enter || space
       this.fireCode(this.code);
       this.code = "";
@@ -178,23 +188,29 @@ class Game {
   }
 
   start() {
+    this.stage = __WEBPACK_IMPORTED_MODULE_2__stages__["c" /* PLAYING */];
+
     console.log("Game started");
     this.gameLoop = setInterval(() => {
-      const missile = new __WEBPACK_IMPORTED_MODULE_0__missile__["a" /* default */](this.screenWidth);
-      this.missiles.push(missile);
-      missile.startFalling();
+      if (!this.paused) {
+        const missile = new __WEBPACK_IMPORTED_MODULE_0__missile__["a" /* default */](this.screenWidth);
+        this.missiles.push(missile);
+        missile.startFalling();
+      }
     }, 3000);
   }
 
   pause() {
-    // this.paused = true;
-    // this.missiles.forEach((missile) => missile.pauseFalling());
+    this.stage = __WEBPACK_IMPORTED_MODULE_2__stages__["b" /* PAUSED */];
+    this.paused = true;
+    this.missiles.forEach((missile) => missile.pause());
     console.log("Game paused");
   }
 
   unpause() {
-    // this.paused = false;
-    // this.missiles.forEach((missile) => missile.startFalling());
+    this.stage = __WEBPACK_IMPORTED_MODULE_2__stages__["c" /* PLAYING */];
+    this.paused = false;
+    this.missiles.forEach((missile) => missile.unpause());
     console.log("Game unpaused");
   }
 
@@ -205,6 +221,7 @@ class Game {
   }
 
   gameOver() {
+    this.stage = __WEBPACK_IMPORTED_MODULE_2__stages__["d" /* WAVE_LOST */];
     clearInterval(this.gameLoop);
     this.missiles = [];
     console.log("Game Over. Final score: " + this.score);
@@ -236,15 +253,25 @@ class Missile {
     this.fallSpeed = 25;
     this.fallInterval = null;
 
+    this.paused = false;
+
     this.startFalling();
   }
 
   startFalling() {
-    this.fallInterval = setInterval(() => this.fall(), this.fallSpeed);
+    this.fallInterval = setInterval(() => {
+      if (!this.paused) {
+        this.fall();
+      }
+    }, this.fallSpeed);
   }
 
-  pauseFalling() {
-    clearInterval(this.fallInterval);
+  pause() {
+    this.paused = true;
+  }
+  
+  unpause() {
+    this.paused = false;
   }
 
   didImpact(screenHeight) {
@@ -654,21 +681,30 @@ const sample = values => {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-let canvas, ctx, rocket;
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__stages__ = __webpack_require__(5);
+let canvas, ctx, rocket, city;
 const buildingIcon = '\uf0f7';
+
 
 function animate(game) {
   canvas = document.getElementById('canvas');
   ctx = canvas.getContext('2d');
 
   rocket = document.getElementById('rocket');
+  city = document.getElementById('city');
   window.requestAnimationFrame(() => draw(game));
 }
 
 function draw(game) {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  renderBackground(game);
+  renderBackground();
+
+  // switch (game.stage) {
+  //   case Stages.PLAYING:
+  // }
+
+  ctx.fillText(game.stage, 20, 20);
 
   // rocket = document.getElementById('rocket');
   // let rocket = new Image();
@@ -696,7 +732,7 @@ const renderMissiles = (game) => {
   game.missiles.forEach((m) => {
     ctx.drawImage(rocket, m.x - 10, m.y - 35);
 
-    ctx.fillStyle = "white";
+    ctx.fillStyle = "black";
     ctx.font = '20px serif';
     ctx.textAlign = "center";
     ctx.fillText(m.code, m.x, m.y + m.height + 18);
@@ -707,16 +743,18 @@ const renderMissiles = (game) => {
   });
 };
 
-const renderBackground = (game) => {
-  let gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
-  gradient.addColorStop(0, 'black');
-  gradient.addColorStop(1, 'blue');
-  ctx.fillStyle = gradient;
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
+const renderBackground = () => {
+  // let gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
+  // gradient.addColorStop(0, 'black');
+  // gradient.addColorStop(1, 'blue');
+  // ctx.fillStyle = gradient;
+  // ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  ctx.drawImage(city, 0, 0, canvas.width, canvas.height);
 };
 
 const renderCode = (game) => {
-  ctx.fillStyle = "white";
+  ctx.fillStyle = "black";
   ctx.textAlign = "center";
   ctx.fillText(game.code, game.screenWidth / 2, game.screenHeight - 10);
 };
@@ -724,13 +762,13 @@ const renderCode = (game) => {
 const renderScore = (game) => {
   ctx.font = '20px serif';
   ctx.textAlign = "left";
-  ctx.fillStyle = "white";
+  ctx.fillStyle = "black";
   ctx.fillText(game.score, 0 + 50, game.screenHeight - 10);
 };
 
 const renderLives = (game) => {
   ctx.font = '20px FontAwesome';
-  ctx.fillStyle = "white";
+  ctx.fillStyle = "black";
   ctx.textAlign = "left";
   let life = 0;
   while (life < game.lives) {
@@ -740,6 +778,28 @@ const renderLives = (game) => {
 };
 
 /* harmony default export */ __webpack_exports__["a"] = (animate);
+
+
+/***/ }),
+/* 5 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+const NOT_STARTED = 0;
+/* harmony export (immutable) */ __webpack_exports__["a"] = NOT_STARTED;
+
+const PLAYING = 1;
+/* harmony export (immutable) */ __webpack_exports__["c"] = PLAYING;
+
+const PAUSED = 2;
+/* harmony export (immutable) */ __webpack_exports__["b"] = PAUSED;
+
+const WAVE_WON = 3;
+/* unused harmony export WAVE_WON */
+
+const WAVE_LOST = 4;
+/* harmony export (immutable) */ __webpack_exports__["d"] = WAVE_LOST;
+
 
 
 /***/ })

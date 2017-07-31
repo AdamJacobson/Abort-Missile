@@ -30,6 +30,9 @@ class Game {
     const keyCode = e.which;
 
     switch (this.stage) {
+      case Stages.NOT_STARTED:
+        break;
+
       case Stages.PAUSED:
         if ([13, 27, 32].includes(keyCode) || keyCode >= 65 && keyCode <= 90) {
           this.unpause();
@@ -51,6 +54,14 @@ class Game {
         } else if (keyCode >= 65 && keyCode <= 90) {
           this.code += e.key;
         }
+        break;
+
+      case Stages.WAVE_WON:
+        break;
+
+      case Stages.WAVE_LOST:
+        break;
+
     }
 
 

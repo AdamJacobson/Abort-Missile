@@ -1,8 +1,9 @@
-let canvas, ctx, rocket, city;
+let canvas, ctx, rocket, city, game;
 const buildingIcon = '\uf0f7';
 import * as Stages from './stages';
 
-function animate(game) {
+function animate(g) {
+  game = g;
   canvas = document.getElementById('canvas');
   ctx = canvas.getContext('2d');
 
@@ -11,16 +12,27 @@ function animate(game) {
   window.requestAnimationFrame(() => draw(game));
 }
 
-function draw(game) {
+function draw() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
   renderBackground();
 
-  // switch (game.stage) {
-  //   case Stages.PLAYING:
-  // }
+  switch (game.stage) {
+    case Stages.PLAYING:
+      renderMissiles(game);
+      renderCode(game);
+      renderLives(game);
+      renderScore(game);
+      break;
 
-  ctx.fillText(game.stage, 20, 20);
+    case Stages.PAUSED:
+      renderPauseScreen();
+      break;
+
+    case Stages.WAVE_LOST:
+      renderGameOverScreen();
+      break;
+  }
 
   // rocket = document.getElementById('rocket');
   // let rocket = new Image();
@@ -35,16 +47,51 @@ function draw(game) {
   //   };
   // }
 
-  renderMissiles(game);
-
-  renderCode(game);
-  renderLives(game);
-  renderScore(game);
+  // Testing only. Show game stage
+  ctx.fillText(game.stage, 20, 20);
 
   window.requestAnimationFrame(() => draw(game));
 }
 
-const renderMissiles = (game) => {
+const renderOverlay = () => {
+  ctx.fillStyle = "rgba(100, 100, 100, 0.7)";
+  ctx.fillRect(0, 0, game.screenWidth, game.screenHeight);
+};
+
+const renderPauseScreen = () => {
+  renderOverlay();
+
+  ctx.fillStyle = "white";
+  ctx.textAlign = "center";
+  ctx.font = '50px serif';
+  ctx.fillText("Game Paused", game.screenWidth / 2, 100);
+
+  ctx.font = '30px serif';
+  ctx.fillText("Instructions", game.screenWidth / 2, 160);
+
+  ctx.font = '20px serif';
+  ctx.fillText("Type the word which appears next to the missile", game.screenWidth / 2, 200);
+  ctx.fillText("Press ENTER or SPACE to send the word", game.screenWidth / 2, 225);
+  ctx.fillText("Press any key to resume the game", game.screenWidth / 2, game.screenHeight - 100);
+};
+
+const renderGameOverScreen = () => {
+  renderOverlay();
+
+  ctx.fillStyle = "white";
+  ctx.textAlign = "center";
+  ctx.font = '50px serif';
+  ctx.fillText("Game Over", game.screenWidth / 2, 100);
+
+  ctx.font = '30px serif';
+  ctx.fillText("Final Score: " + game.score, game.screenWidth / 2, 160);
+  ctx.fillText("Wave: " + game.wave, game.screenWidth / 2, 200);
+
+  ctx.font = '20px serif';
+  ctx.fillText("Press any key to play again", game.screenWidth / 2, 250);
+};
+
+const renderMissiles = () => {
   game.missiles.forEach((m) => {
     ctx.drawImage(rocket, m.x - 10, m.y - 35);
 
@@ -60,29 +107,23 @@ const renderMissiles = (game) => {
 };
 
 const renderBackground = () => {
-  // let gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
-  // gradient.addColorStop(0, 'black');
-  // gradient.addColorStop(1, 'blue');
-  // ctx.fillStyle = gradient;
-  // ctx.fillRect(0, 0, canvas.width, canvas.height);
-
   ctx.drawImage(city, 0, 0, canvas.width, canvas.height);
 };
 
-const renderCode = (game) => {
+const renderCode = () => {
   ctx.fillStyle = "black";
   ctx.textAlign = "center";
   ctx.fillText(game.code, game.screenWidth / 2, game.screenHeight - 10);
 };
 
-const renderScore = (game) => {
+const renderScore = () => {
   ctx.font = '20px serif';
   ctx.textAlign = "left";
   ctx.fillStyle = "black";
   ctx.fillText(game.score, 0 + 50, game.screenHeight - 10);
 };
 
-const renderLives = (game) => {
+const renderLives = () => {
   ctx.font = '20px FontAwesome';
   ctx.fillStyle = "black";
   ctx.textAlign = "left";

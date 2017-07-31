@@ -55,4 +55,4 @@ A missile should be a self contained object and element on the screen. Rendering
 
 **Day 5 (Wed)**: Waves and increasing difficulty.
 
-**Day 6 (Thu)**:
+**Day 6 (Thu)**: Final touchups and tweaking

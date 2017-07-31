@@ -147,20 +147,31 @@ class Game {
   sendKey(e) {
     const keyCode = e.which;
 
-    if (keyCode === 27) { // Escape
-      if (this.stage === __WEBPACK_IMPORTED_MODULE_2__stages__["b" /* PAUSED */]) {
-        this.unpause();
-      } else {
-        this.pause();
-      }
-    } else if (keyCode === 13 || keyCode === 32) { // enter || space
-      this.fireCode(this.code);
-      this.code = "";
-    } else if (keyCode === 8) { // backspace
-      this.code = this.code.slice(0, this.code.length - 1);
-    } else if (keyCode >= 65 && keyCode <= 90) {
-      this.code += e.key;
+    switch (this.stage) {
+      case __WEBPACK_IMPORTED_MODULE_2__stages__["b" /* PAUSED */]:
+        if ([13, 27, 32].includes(keyCode) || keyCode >= 65 && keyCode <= 90) {
+          this.unpause();
+        }
+        break;
+
+      case __WEBPACK_IMPORTED_MODULE_2__stages__["c" /* PLAYING */]:
+        if (keyCode === 27) { // Escape
+          if (this.stage === __WEBPACK_IMPORTED_MODULE_2__stages__["b" /* PAUSED */]) {
+            this.unpause();
+          } else {
+            this.pause();
+          }
+        } else if (keyCode === 13 || keyCode === 32) { // enter || space
+          this.fireCode(this.code);
+          this.code = "";
+        } else if (keyCode === 8) { // backspace
+          this.code = this.code.slice(0, this.code.length - 1);
+        } else if (keyCode >= 65 && keyCode <= 90) {
+          this.code += e.key;
+        }
     }
+
+
   }
 
   fireCode(code) {
@@ -197,7 +208,7 @@ class Game {
         this.missiles.push(missile);
         missile.startFalling();
       }
-    }, 3000);
+    }, 1500);
   }
 
   pause() {

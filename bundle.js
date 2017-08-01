@@ -79,28 +79,28 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 const setupButtons = (game) => {
-  document.getElementById('button-instructions').addEventListener('click', () => {
-    game.pause();
-    console.log("Clicked instructions");
-    document.getElementById('instructions-modal').classList.add('show');
-  });
-
-  document.getElementById('button-play-pause').addEventListener('click', () => {
-    console.log("Clicked play/pause");
-    game.unpause();
-  });
-
-  document.getElementById('close-modal').addEventListener('click', () => {
-    game.unpause();
-    document.getElementById('instructions-modal').classList.remove('show');
-  });
-
-  document.getElementById('mask').addEventListener('click', (e) => {
-    if (e.target === e.currentTarget) {
-      game.unpause();
-      document.getElementById('instructions-modal').classList.remove('show');
-    }
-  });
+  // document.getElementById('button-instructions').addEventListener('click', () => {
+  //   game.pause();
+  //   console.log("Clicked instructions");
+  //   document.getElementById('instructions-modal').classList.add('show');
+  // });
+  //
+  // document.getElementById('button-play-pause').addEventListener('click', () => {
+  //   console.log("Clicked play/pause");
+  //   game.unpause();
+  // });
+  //
+  // document.getElementById('close-modal').addEventListener('click', () => {
+  //   game.unpause();
+  //   document.getElementById('instructions-modal').classList.remove('show');
+  // });
+  //
+  // document.getElementById('mask').addEventListener('click', (e) => {
+  //   if (e.target === e.currentTarget) {
+  //     game.unpause();
+  //     document.getElementById('instructions-modal').classList.remove('show');
+  //   }
+  // });
 
   document.getElementsByTagName('body')[0].addEventListener('keydown', (e) => {
     game.sendKey(e);
@@ -122,26 +122,25 @@ const setupButtons = (game) => {
 
 class Game {
   constructor() {
+    const canvas = document.getElementById('canvas');
+    this.screenWidth = canvas.width;
+    this.screenHeight = canvas.height;
+
+    this.reset();
+
+    Object(__WEBPACK_IMPORTED_MODULE_1__animate__["a" /* default */])(this);
+  }
+
+  reset() {
     this.score = 0;
     this.lives = 3;
     this.wave = 0;
 
-    const canvas = document.getElementById('canvas');
-
-    this.screenWidth = canvas.width;
-    this.screenHeight = canvas.height;
-
     this.missiles = [];
-
     this.gameLoop = null;
-
     this.paused = false;
-
     this.code = "";
-
     this.stage = __WEBPACK_IMPORTED_MODULE_2__stages__["a" /* NOT_STARTED */];
-
-    Object(__WEBPACK_IMPORTED_MODULE_1__animate__["a" /* default */])(this);
   }
 
   sendKey(e) {
@@ -149,13 +148,13 @@ class Game {
 
     switch (this.stage) {
       case __WEBPACK_IMPORTED_MODULE_2__stages__["a" /* NOT_STARTED */]:
-        if ([13, 27, 32].includes(keyCode) || keyCode >= 65 && keyCode <= 90) {
+        if (this._anyKey(keyCode)) {
           this.nextWave();
         }
         break;
 
       case __WEBPACK_IMPORTED_MODULE_2__stages__["b" /* PAUSED */]:
-        if ([13, 27, 32].includes(keyCode) || keyCode >= 65 && keyCode <= 90) {
+        if (this._anyKey(keyCode)) {
           this.unpause();
         }
         break;
@@ -178,15 +177,21 @@ class Game {
         break;
 
       case __WEBPACK_IMPORTED_MODULE_2__stages__["e" /* WAVE_WON */]:
-        if ([13, 27, 32].includes(keyCode) || keyCode >= 65 && keyCode <= 90) {
+        if (this._anyKey(keyCode)) {
           this.nextWave();
         }
         break;
 
       case __WEBPACK_IMPORTED_MODULE_2__stages__["d" /* WAVE_LOST */]:
+        if (this._anyKey(keyCode)) {
+          this.reset();
+        }
         break;
-
     }
+  }
+
+  _anyKey(keyCode) {
+    return ([13, 27, 32].includes(keyCode) || keyCode >= 65 && keyCode <= 90);
   }
 
   fireCode(code) {
@@ -767,7 +772,7 @@ function renderFrame() {
   }
 
   // Testing only. Show game stage
-  ctx.fillText(game.stage, 20, 20);
+  // ctx.fillText(game.stage, 20, 20);
 
   window.requestAnimationFrame(() => renderFrame());
 }

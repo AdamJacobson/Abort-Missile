@@ -4,26 +4,25 @@ import * as Stages from './stages';
 
 class Game {
   constructor() {
+    const canvas = document.getElementById('canvas');
+    this.screenWidth = canvas.width;
+    this.screenHeight = canvas.height;
+
+    this.reset();
+
+    render(this);
+  }
+
+  reset() {
     this.score = 0;
     this.lives = 3;
     this.wave = 0;
 
-    const canvas = document.getElementById('canvas');
-
-    this.screenWidth = canvas.width;
-    this.screenHeight = canvas.height;
-
     this.missiles = [];
-
     this.gameLoop = null;
-
     this.paused = false;
-
     this.code = "";
-
     this.stage = Stages.NOT_STARTED;
-
-    render(this);
   }
 
   sendKey(e) {
@@ -31,13 +30,13 @@ class Game {
 
     switch (this.stage) {
       case Stages.NOT_STARTED:
-        if ([13, 27, 32].includes(keyCode) || keyCode >= 65 && keyCode <= 90) {
+        if (this._anyKey(keyCode)) {
           this.nextWave();
         }
         break;
 
       case Stages.PAUSED:
-        if ([13, 27, 32].includes(keyCode) || keyCode >= 65 && keyCode <= 90) {
+        if (this._anyKey(keyCode)) {
           this.unpause();
         }
         break;
@@ -60,15 +59,21 @@ class Game {
         break;
 
       case Stages.WAVE_WON:
-        if ([13, 27, 32].includes(keyCode) || keyCode >= 65 && keyCode <= 90) {
+        if (this._anyKey(keyCode)) {
           this.nextWave();
         }
         break;
 
       case Stages.WAVE_LOST:
+        if (this._anyKey(keyCode)) {
+          this.reset();
+        }
         break;
-
     }
+  }
+
+  _anyKey(keyCode) {
+    return ([13, 27, 32].includes(keyCode) || keyCode >= 65 && keyCode <= 90);
   }
 
   fireCode(code) {

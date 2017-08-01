@@ -47,7 +47,7 @@ function renderFrame() {
   }
 
   // Testing only. Show game stage
-  ctx.fillText(game.stage, 20, 20);
+  // ctx.fillText(game.stage, 20, 20);
 
   window.requestAnimationFrame(() => renderFrame());
 }

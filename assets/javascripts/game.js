@@ -26,15 +26,14 @@ class Game {
     render(this);
   }
 
-  reset() {
-
-  }
-
   sendKey(e) {
     const keyCode = e.which;
 
     switch (this.stage) {
       case Stages.NOT_STARTED:
+        if ([13, 27, 32].includes(keyCode) || keyCode >= 65 && keyCode <= 90) {
+          this.nextWave();
+        }
         break;
 
       case Stages.PAUSED:

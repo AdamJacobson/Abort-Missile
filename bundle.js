@@ -75,7 +75,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 document.addEventListener('DOMContentLoaded', () => {
   const game = new __WEBPACK_IMPORTED_MODULE_0__game__["a" /* default */]();
   setupButtons(game);
-  game.nextWave();
+  // game.nextWave();
 });
 
 const setupButtons = (game) => {
@@ -144,15 +144,14 @@ class Game {
     Object(__WEBPACK_IMPORTED_MODULE_1__animate__["a" /* default */])(this);
   }
 
-  reset() {
-
-  }
-
   sendKey(e) {
     const keyCode = e.which;
 
     switch (this.stage) {
       case __WEBPACK_IMPORTED_MODULE_2__stages__["a" /* NOT_STARTED */]:
+        if ([13, 27, 32].includes(keyCode) || keyCode >= 65 && keyCode <= 90) {
+          this.nextWave();
+        }
         break;
 
       case __WEBPACK_IMPORTED_MODULE_2__stages__["b" /* PAUSED */]:
@@ -745,6 +744,10 @@ function renderFrame() {
   renderBackground();
 
   switch (game.stage) {
+    case __WEBPACK_IMPORTED_MODULE_0__stages__["a" /* NOT_STARTED */]:
+      renderTitleScreen();
+      break;
+
     case __WEBPACK_IMPORTED_MODULE_0__stages__["c" /* PLAYING */]:
       renderMissiles();
       renderHud();
@@ -764,7 +767,7 @@ function renderFrame() {
   }
 
   // Testing only. Show game stage
-  // ctx.fillText(game.stage, 20, 20);
+  ctx.fillText(game.stage, 20, 20);
 
   window.requestAnimationFrame(() => renderFrame());
 }
@@ -772,6 +775,24 @@ function renderFrame() {
 const renderOverlay = () => {
   ctx.fillStyle = "rgba(100, 100, 100, 0.7)";
   ctx.fillRect(0, 0, game.screenWidth, game.screenHeight);
+};
+
+const renderTitleScreen = () => {
+  renderOverlay();
+
+  ctx.fillStyle = "white";
+  ctx.textAlign = "center";
+  ctx.font = font(50);
+  ctx.fillText("Abort Missile!", game.screenWidth / 2, 100);
+
+  ctx.font = font(30);
+  ctx.fillText("Instructions", game.screenWidth / 2, 160);
+
+  ctx.font = font(20);
+  ctx.fillText("Type the word which appears by the missile", game.screenWidth / 2, 200);
+  ctx.fillText("Press ENTER or SPACE to send the word", game.screenWidth / 2, 225);
+  ctx.fillText("Press ESCAPE at any time to pause the game", game.screenWidth / 2, 350);
+  ctx.fillText("Press any key to begin!", game.screenWidth / 2, game.screenHeight - 100);
 };
 
 const renderWaveCompleteScreen = () => {
@@ -798,7 +819,7 @@ const renderPauseScreen = () => {
   ctx.fillText("Instructions", game.screenWidth / 2, 160);
 
   ctx.font = font(20);
-  ctx.fillText("Type the word which appears next to the missile", game.screenWidth / 2, 200);
+  ctx.fillText("Type the word which appears by the missile", game.screenWidth / 2, 200);
   ctx.fillText("Press ENTER or SPACE to send the word", game.screenWidth / 2, 225);
   ctx.fillText("Press any key to resume the game", game.screenWidth / 2, game.screenHeight - 100);
 };

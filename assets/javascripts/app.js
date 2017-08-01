@@ -3,7 +3,7 @@ import Game from './game';
 document.addEventListener('DOMContentLoaded', () => {
   const game = new Game();
   setupButtons(game);
-  game.nextWave();
+  // game.nextWave();
 });
 
 const setupButtons = (game) => {

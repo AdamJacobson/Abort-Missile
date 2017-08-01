@@ -1,12 +1,12 @@
 import Missile from './missile';
-import animate from './animate';
+import render from './animate';
 import * as Stages from './stages';
 
 class Game {
   constructor() {
     this.score = 0;
     this.lives = 3;
-    this.wave = 1;
+    this.wave = 0;
 
     const canvas = document.getElementById('canvas');
 
@@ -23,7 +23,11 @@ class Game {
 
     this.stage = Stages.NOT_STARTED;
 
-    animate(this);
+    render(this);
+  }
+
+  reset() {
+
   }
 
   sendKey(e) {
@@ -57,14 +61,15 @@ class Game {
         break;
 
       case Stages.WAVE_WON:
+        if ([13, 27, 32].includes(keyCode) || keyCode >= 65 && keyCode <= 90) {
+          this.nextWave();
+        }
         break;
 
       case Stages.WAVE_LOST:
         break;
 
     }
-
-
   }
 
   fireCode(code) {
@@ -76,59 +81,69 @@ class Game {
   }
 
   impact(missile) {
-    this.removeMissile(missile);
     this.lives--;
-    this.checkGameOver();
+    this.removeMissile(missile);
   }
 
   destroy(missile) {
-    this.removeMissile(missile);
     this.score += missile.points;
+    this.removeMissile(missile);
   }
 
   removeMissile(missile) {
     const idx = this.missiles.indexOf(missile);
     this.missiles = this.missiles.slice(0, idx).concat(this.missiles.slice(idx + 1));
+
+    if (this.lives === 0) {
+      this.gameOver();
+    } else if (this.missilesLeft === 0 && this.missiles.length === 0) {
+      this.endWave();
+    }
   }
 
-  start() {
-    this.stage = Stages.PLAYING;
+  nextWave() {
+    this.wave++;
+    this.startWave();
+  }
 
-    console.log("Game started");
+  startWave() {
+    this.stage = Stages.PLAYING;
+    this.missilesLeft = 10;
+    const missileInterval = 1500;
+
     this.gameLoop = setInterval(() => {
       if (!this.paused) {
-        const missile = new Missile(this.screenWidth);
-        this.missiles.push(missile);
-        missile.startFalling();
+        if (this.missilesLeft > 0) {
+          const missile = new Missile(this.screenWidth);
+          this.missiles.push(missile);
+          missile.startFalling();
+          this.missilesLeft--;
+        }
       }
-    }, 1500);
+    }, missileInterval);
+  }
+
+  endWave() {
+    this.stage = Stages.WAVE_WON;
+    clearInterval(this.gameLoop);
   }
 
   pause() {
     this.stage = Stages.PAUSED;
     this.paused = true;
     this.missiles.forEach((missile) => missile.pause());
-    console.log("Game paused");
   }
 
   unpause() {
     this.stage = Stages.PLAYING;
     this.paused = false;
     this.missiles.forEach((missile) => missile.unpause());
-    console.log("Game unpaused");
-  }
-
-  checkGameOver() {
-    if (this.lives <= 0) {
-      this.gameOver();
-    }
   }
 
   gameOver() {
     this.stage = Stages.WAVE_LOST;
     clearInterval(this.gameLoop);
     this.missiles = [];
-    console.log("Game Over. Final score: " + this.score);
 
   }
 }

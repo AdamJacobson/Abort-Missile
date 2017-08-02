@@ -42,10 +42,6 @@ class Missile {
   fall() {
     this.y += 1;
   }
-
-  impact() {
-    console.log("Missile has impacted");
-  }
 }
 
 export default Missile;

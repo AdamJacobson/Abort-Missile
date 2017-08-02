@@ -29,19 +29,25 @@ In the game, the following features will be available
 
 ## Technologies and Architecture
 
-- Vanilla JavaScript for structure. jQuery for DOM manipulation.
+- Vanilla JavaScript for structure. ES6 classes will be used.
 - HTML5 vanilla canvas with no libraries.
 - Webpack to bundle javascript files.
 
 The following script files will be needed:
 
-`game.js` which will hold the game state, user lives, score and all active missiles
+`app.js` just does initial setup of the game
 
-`missile.js` which represents one missile. Has the code associated with it and a point value.
+`game.js` which will hold the game state, user lives, score and all active missiles. It will also handle user input and manage the stage of the game.
 
-## Technical Hurdles to Consider
+`random_words.js` holds a library of words organized by length.
 
-A missile should be a self contained object and element on the screen. Rendering a new one at a random location shouldn't be too hard. I need to decide if it would be easier to use vanilla DOM elements or have the game inside a Canvas. I know I can animate something moving with CSS fairly easily. I will also need to detect when the missile has reached the bottom of the screen in order to trigger an event. Or, I could use the same time given to the animation to set a timeout event. The timeout will be cleared on the missile being destroyed. This would require the missiles to fall straight down, rather than at an angle because that would change the travel time.
+`missile.js` which represents one missile. Has the code associated with it, a point value and current location on the screen.
+
+`animate.js` will contain the canvas code for rendering the game based on the current stage. It will manage and keep track of all active sprite animations.
+
+`sprite.js` defines a sprite based on a sprite sheet in order to create frame based animations
+
+`stages.js` is just a collection of `consts`'s which represent the stage of the game
 
 ## Implementation Timeline
 
@@ -51,8 +57,16 @@ A missile should be a self contained object and element on the screen. Rendering
 
 **Day 3 (Mon)**: Scoring and lives updating on change
 
-**Day 4 (Tue)**: Background graphics, missiles and explosions.
+**Day 4 (Tue)**: Background graphics, missiles and explosions animations.
 
 **Day 5 (Wed)**: Waves and increasing difficulty.
 
 **Day 6 (Thu)**: Final touchups and tweaking
+
+## Bonus features
+
+**Score Keeping**: Maintain the current best score for the player.
+
+**Diversify enemy types**: Add special enemy type such as MIRVs which break into multiple smaller missiles.
+
+**Powerups**: Special items which appear and aren't dangerous but grant the player special abilites (extra lives, time slowing)

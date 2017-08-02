@@ -12,6 +12,7 @@ class Missile {
 
     this.fallSpeed = 25;
     this.fallInterval = null;
+    this.destroyed = false;
 
     this.paused = false;
 
@@ -29,7 +30,7 @@ class Missile {
   pause() {
     this.paused = true;
   }
-  
+
   unpause() {
     this.paused = false;
   }

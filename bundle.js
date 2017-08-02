@@ -197,7 +197,8 @@ class Game {
   fireCode(code) {
     this.missiles.forEach((missile) => {
       if (code === missile.code) {
-        this.destroy(missile);
+        // this.destroy(missile);
+        missile.destroyed = true;
       }
     });
   }
@@ -293,6 +294,7 @@ class Missile {
 
     this.fallSpeed = 25;
     this.fallInterval = null;
+    this.destroyed = false;
 
     this.paused = false;
 
@@ -310,7 +312,7 @@ class Missile {
   pause() {
     this.paused = true;
   }
-  
+
   unpause() {
     this.paused = false;
   }
@@ -914,6 +916,9 @@ const renderMissiles = () => {
     if (m.didImpact(canvas.height)) {
       game.impact(m);
       newSprite(impactExplosionOptions(m.x - m.width - 55, m.y - m.height - 45));
+    } else if (m.destroyed) {
+      game.destroy(m);
+      newSprite(airExplosionOptions(m.x - m.width - 55, m.y - m.height - 45));
     }
   });
 };

@@ -188,6 +188,9 @@ const renderMissiles = () => {
     if (m.didImpact(canvas.height)) {
       game.impact(m);
       newSprite(impactExplosionOptions(m.x - m.width - 55, m.y - m.height - 45));
+    } else if (m.destroyed) {
+      game.destroy(m);
+      newSprite(airExplosionOptions(m.x - m.width - 55, m.y - m.height - 45));
     }
   });
 };

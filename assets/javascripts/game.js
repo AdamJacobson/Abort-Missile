@@ -79,7 +79,8 @@ class Game {
   fireCode(code) {
     this.missiles.forEach((missile) => {
       if (code === missile.code) {
-        this.destroy(missile);
+        // this.destroy(missile);
+        missile.destroyed = true;
       }
     });
   }

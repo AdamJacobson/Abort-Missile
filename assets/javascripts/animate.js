@@ -1,8 +1,10 @@
 import * as Stages from './stages';
 import sprite from './sprite';
 
-let canvas, ctx, rocket, city, game, impactExplosionSprite;
 const buildingIcon = '\uf0f7';
+let canvas, ctx, rocket, city, game;
+let impactExplosionSheet, airExplosionSheet;
+let activeSprites = [];
 
 const defaultFont = "Exo 2";
 const font = (size) => {
@@ -17,18 +19,60 @@ function render(g) {
   rocket = document.getElementById('rocket');
   city = document.getElementById('city');
 
-  const impactExplosionSheet = document.getElementById('impact_explosion');
-  impactExplosionSprite = sprite({
+  impactExplosionSheet = document.getElementById('impact_explosion');
+  airExplosionSheet = document.getElementById('air_explosion');
+
+  window.requestAnimationFrame(renderFrame);
+}
+
+const impactExplosionOptions = (x, y) => {
+  return {
     ctx: ctx,
     width: 131,
     height: 162,
     numberOfFrames: 25,
     ticksPerFrame: 2,
+    x,
+    y,
     image: impactExplosionSheet
+  };
+};
+
+const airExplosionOptions = (x, y) => {
+  return {
+    ctx: ctx,
+    width: 157,
+    height: 229,
+    numberOfFrames: 19,
+    ticksPerFrame: 2,
+    x,
+    y,
+    image: airExplosionSheet
+  };
+};
+
+const newSprite = options => {
+  activeSprites.push(sprite(options));
+};
+
+const renderSprites = () => {
+  let stillActiveSprites = [];
+
+  activeSprites.forEach(s => {
+    s.update();
+    s.render();
+
+    if (!s.done) {
+      stillActiveSprites.push(s);
+    }
   });
 
-  window.requestAnimationFrame(renderFrame);
-}
+  activeSprites = stillActiveSprites;
+};
+
+const clearSprites = () => {
+  activeSprites = [];
+};
 
 function renderFrame() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -38,12 +82,11 @@ function renderFrame() {
   switch (game.stage) {
     case Stages.NOT_STARTED:
       renderTitleScreen();
-      impactExplosionSprite.render(200, 200);
-      impactExplosionSprite.update();
       break;
 
     case Stages.PLAYING:
       renderMissiles();
+      renderSprites();
       renderHud();
       break;
 
@@ -53,15 +96,14 @@ function renderFrame() {
 
     case Stages.WAVE_LOST:
       renderGameOverScreen();
+      clearSprites();
       break;
 
     case Stages.WAVE_WON:
       renderWaveCompleteScreen();
+      clearSprites();
       break;
   }
-
-  // Testing only. Show game stage
-  // ctx.fillText(game.stage, 20, 20);
 
   window.requestAnimationFrame(() => renderFrame());
 }
@@ -145,11 +187,10 @@ const renderMissiles = () => {
 
     if (m.didImpact(canvas.height)) {
       game.impact(m);
+      newSprite(impactExplosionOptions(m.x - m.width - 55, m.y - m.height - 45));
     }
   });
 };
-
-
 
 const renderBackground = () => {
   ctx.drawImage(city, 0, 0, canvas.width, canvas.height);

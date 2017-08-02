@@ -9,6 +9,10 @@ const sprite = (options) => {
   that.width = options.width;
   that.height = options.height;
   that.image = options.image;
+  that.x = options.x;
+  that.y = options.y;
+  that.repeat = options.repeat;
+  that.done = false;
 
   that.update = function () {
     tickCount += 1;
@@ -16,18 +20,19 @@ const sprite = (options) => {
     if (tickCount > ticksPerFrame) {
       tickCount = 0;
 
-      // If the current frame index is in range
       if (frameIndex < numberOfFrames - 1) {
-        // Go to the next frame
         frameIndex += 1;
       } else {
-        frameIndex = 0;
+        if (that.repeat) {
+          frameIndex = 0;
+        } else {
+          that.done = true;
+        }
       }
     }
   };
 
   that.render = function () {
-    // Draw the animation
     // image, sx, sy, sWitdh, sHeight, dx, dy, dWidth, dHeight
     that.ctx.drawImage(
       that.image,
@@ -35,8 +40,8 @@ const sprite = (options) => {
       0,
       that.width,
       that.height,
-      100,
-      100,
+      that.x,
+      that.y,
       that.width,
       that.height
     );

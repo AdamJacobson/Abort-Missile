@@ -85,8 +85,8 @@ function renderFrame() {
       break;
 
     case Stages.PLAYING:
-      renderMissiles();
       renderSprites();
+      renderMissiles();
       renderHud();
       break;
 
@@ -187,7 +187,7 @@ const renderMissiles = () => {
 
     if (m.didImpact(canvas.height)) {
       game.impact(m);
-      newSprite(impactExplosionOptions(m.x - m.width - 55, m.y - m.height - 45));
+      newSprite(impactExplosionOptions(m.x - m.width - 60, m.y - m.height - 40));
     } else if (m.destroyed) {
       game.destroy(m);
       newSprite(airExplosionOptions(m.x - m.width - 55, m.y - m.height - 45));

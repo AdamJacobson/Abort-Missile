@@ -723,9 +723,11 @@ const sample = values => {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__stages__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__sprite__ = __webpack_require__(6);
 
 
-let canvas, ctx, rocket, city, game;
+
+let canvas, ctx, rocket, city, game, impactExplosionSprite;
 const buildingIcon = '\uf0f7';
 
 const defaultFont = "Exo 2";
@@ -740,6 +742,17 @@ function render(g) {
 
   rocket = document.getElementById('rocket');
   city = document.getElementById('city');
+
+  const impactExplosionSheet = document.getElementById('impact_explosion');
+  impactExplosionSprite = Object(__WEBPACK_IMPORTED_MODULE_1__sprite__["a" /* default */])({
+    ctx: ctx,
+    width: 131,
+    height: 162,
+    numberOfFrames: 25,
+    ticksPerFrame: 2,
+    image: impactExplosionSheet
+  });
+
   window.requestAnimationFrame(renderFrame);
 }
 
@@ -751,6 +764,8 @@ function renderFrame() {
   switch (game.stage) {
     case __WEBPACK_IMPORTED_MODULE_0__stages__["a" /* NOT_STARTED */]:
       renderTitleScreen();
+      impactExplosionSprite.render(200, 200);
+      impactExplosionSprite.update();
       break;
 
     case __WEBPACK_IMPORTED_MODULE_0__stages__["c" /* PLAYING */]:
@@ -860,6 +875,8 @@ const renderMissiles = () => {
   });
 };
 
+
+
 const renderBackground = () => {
   ctx.drawImage(city, 0, 0, canvas.width, canvas.height);
 };
@@ -907,6 +924,61 @@ const WAVE_WON = 3;
 const WAVE_LOST = 4;
 /* harmony export (immutable) */ __webpack_exports__["d"] = WAVE_LOST;
 
+
+
+/***/ }),
+/* 6 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+const sprite = (options) => {
+  let that = {},
+    frameIndex = 0,
+    tickCount = 0,
+    ticksPerFrame = options.ticksPerFrame || 0,
+    numberOfFrames = options.numberOfFrames || 1;
+
+  that.ctx = options.ctx;
+  that.width = options.width;
+  that.height = options.height;
+  that.image = options.image;
+
+  that.update = function () {
+    tickCount += 1;
+
+    if (tickCount > ticksPerFrame) {
+      tickCount = 0;
+
+      // If the current frame index is in range
+      if (frameIndex < numberOfFrames - 1) {
+        // Go to the next frame
+        frameIndex += 1;
+      } else {
+        frameIndex = 0;
+      }
+    }
+  };
+
+  that.render = function () {
+    // Draw the animation
+    // image, sx, sy, sWitdh, sHeight, dx, dy, dWidth, dHeight
+    that.ctx.drawImage(
+      that.image,
+      frameIndex * that.width,
+      0,
+      that.width,
+      that.height,
+      100,
+      100,
+      that.width,
+      that.height
+    );
+  };
+
+  return that;
+};
+
+/* harmony default export */ __webpack_exports__["a"] = (sprite);
 
 
 /***/ })

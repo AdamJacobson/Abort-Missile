@@ -1,6 +1,7 @@
 import * as Stages from './stages';
+import sprite from './sprite';
 
-let canvas, ctx, rocket, city, game;
+let canvas, ctx, rocket, city, game, impactExplosionSprite;
 const buildingIcon = '\uf0f7';
 
 const defaultFont = "Exo 2";
@@ -15,6 +16,17 @@ function render(g) {
 
   rocket = document.getElementById('rocket');
   city = document.getElementById('city');
+
+  const impactExplosionSheet = document.getElementById('impact_explosion');
+  impactExplosionSprite = sprite({
+    ctx: ctx,
+    width: 131,
+    height: 162,
+    numberOfFrames: 25,
+    ticksPerFrame: 2,
+    image: impactExplosionSheet
+  });
+
   window.requestAnimationFrame(renderFrame);
 }
 
@@ -26,6 +38,8 @@ function renderFrame() {
   switch (game.stage) {
     case Stages.NOT_STARTED:
       renderTitleScreen();
+      impactExplosionSprite.render(200, 200);
+      impactExplosionSprite.update();
       break;
 
     case Stages.PLAYING:
@@ -134,6 +148,8 @@ const renderMissiles = () => {
     }
   });
 };
+
+
 
 const renderBackground = () => {
   ctx.drawImage(city, 0, 0, canvas.width, canvas.height);

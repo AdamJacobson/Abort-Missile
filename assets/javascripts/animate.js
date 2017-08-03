@@ -85,9 +85,7 @@ function renderFrame() {
 
   switch (game.stage) {
     case Stages.NOT_STARTED:
-      // renderWaveCompleteScreen();
-      renderGameCompleteScreen();
-      // renderTitleScreen();
+      renderTitleScreen();
       break;
 
     case Stages.PLAYING:

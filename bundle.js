@@ -718,9 +718,7 @@ function renderFrame() {
 
   switch (game.stage) {
     case __WEBPACK_IMPORTED_MODULE_0__stages__["b" /* NOT_STARTED */]:
-      // renderWaveCompleteScreen();
-      renderGameCompleteScreen();
-      // renderTitleScreen();
+      renderTitleScreen();
       break;
 
     case __WEBPACK_IMPORTED_MODULE_0__stages__["d" /* PLAYING */]:

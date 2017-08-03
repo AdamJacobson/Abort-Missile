@@ -233,8 +233,6 @@ class Game {
     });
     incoming = this._shuffle(incoming);
 
-    console.log(incoming);
-
     this.gameLoop = setInterval(() => {
       if (!this.paused) {
         if (this.missilesLeft > 0) {
@@ -839,14 +837,32 @@ const renderGameOverScreen = () => {
   ctx.fillText("Press any key to play again", game.screenWidth / 2, game.screenHeight - 100);
 };
 
+const textColor = (gameCodeChar, missileCodeChar) => {
+  if (gameCodeChar === missileCodeChar) {
+    return "red";
+  }
+  return "black";
+};
+
+const texter = (str, x, y) =>{
+  for(let i = 0; i <= str.length; ++i){
+    let ch = str.charAt(i);
+    ctx.fillStyle = textColor(game.code[i], str[i]);
+    ctx.fillText(ch, x, y);
+    x += ctx.measureText(ch).width;
+  }
+};
+
 const renderMissiles = () => {
   game.missiles.forEach((m) => {
     ctx.drawImage(rocket, m.x - 12, m.y - 35);
+    ctx.fillStyle = "red";
+    ctx.fillRect(m.x, m.y, 5, 5);
 
     ctx.fillStyle = "black";
     ctx.font = font(fontSm - 4);
-    ctx.textAlign = "center";
-    ctx.fillText(m.code, m.x, m.y + m.height + 18);
+    let codeWidth = ctx.measureText(m.code).width;
+    texter(m.code, m.x - codeWidth / 2, m.y + m.height + 18);
 
     if (m.didImpact(canvas.height)) {
       game.impact(m);

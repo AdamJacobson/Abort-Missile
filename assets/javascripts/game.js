@@ -138,8 +138,6 @@ class Game {
     });
     incoming = this._shuffle(incoming);
 
-    console.log(incoming);
-
     this.gameLoop = setInterval(() => {
       if (!this.paused) {
         if (this.missilesLeft > 0) {

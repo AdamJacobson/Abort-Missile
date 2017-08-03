@@ -1,12 +1,16 @@
 import * as Stages from './stages';
 import sprite from './sprite';
 
+const fontLg = 30;
+const fontMed = 24;
+const fontSm = 18;
+
 const buildingIcon = '\uf0f7';
 let canvas, ctx, rocket, city, game;
 let impactExplosionSheet, airExplosionSheet;
 let activeSprites = [];
 
-const defaultFont = "Exo 2";
+const defaultFont = "PressStart";
 const font = (size) => {
   return `${size}px '${defaultFont}'`;
 };
@@ -81,7 +85,9 @@ function renderFrame() {
 
   switch (game.stage) {
     case Stages.NOT_STARTED:
-      renderTitleScreen();
+      // renderWaveCompleteScreen();
+      renderGameCompleteScreen();
+      // renderTitleScreen();
       break;
 
     case Stages.PLAYING:
@@ -122,15 +128,14 @@ const renderGameCompleteScreen = () => {
 
   ctx.fillStyle = "white";
   ctx.textAlign = "center";
-  ctx.font = font(50);
+  ctx.font = font(fontLg);
   ctx.fillText("Thats the end!", game.screenWidth / 2, 100);
 
-  ctx.font = font(30);
+  ctx.font = font(fontSm);
   ctx.fillText("Thanks for playing!", game.screenWidth / 2, 160);
   ctx.fillText("Final Score: " + game.score, game.screenWidth / 2, 200);
 
-  ctx.font = font(20);
-  ctx.fillText("Press any key to play again", game.screenWidth / 2, 250);
+  ctx.fillText("Press any key to play again", game.screenWidth / 2, game.screenHeight - 100);
 };
 
 const renderTitleScreen = () => {
@@ -138,17 +143,27 @@ const renderTitleScreen = () => {
 
   ctx.fillStyle = "white";
   ctx.textAlign = "center";
-  ctx.font = font(50);
+  ctx.font = font(fontLg);
   ctx.fillText("Abort Missile!", game.screenWidth / 2, 100);
 
-  ctx.font = font(30);
-  ctx.fillText("Instructions", game.screenWidth / 2, 160);
+  renderInstructions();
 
-  ctx.font = font(20);
-  ctx.fillText("Type the word which appears by the missile", game.screenWidth / 2, 200);
-  ctx.fillText("Press ENTER or SPACE to send the word", game.screenWidth / 2, 225);
-  ctx.fillText("Press ESCAPE at any time to pause the game", game.screenWidth / 2, 350);
   ctx.fillText("Press any key to begin!", game.screenWidth / 2, game.screenHeight - 100);
+};
+
+const renderInstructions = () => {
+  ctx.font = font(fontMed);
+  ctx.fillText("Instructions", game.screenWidth / 2, 180);
+
+  ctx.font = font(fontSm);
+  ctx.fillText("Type the word which", game.screenWidth / 2, 220);
+  ctx.fillText("appears by the missile", game.screenWidth / 2, 240);
+
+  ctx.fillText("Press ENTER or SPACE", game.screenWidth / 2, 270);
+  ctx.fillText("to send the word", game.screenWidth / 2, 290);
+
+  ctx.fillText("Press ESCAPE at any", game.screenWidth / 2, 370);
+  ctx.fillText("time to pause the game", game.screenWidth / 2, 390);
 };
 
 const renderWaveCompleteScreen = () => {
@@ -156,11 +171,11 @@ const renderWaveCompleteScreen = () => {
 
   ctx.fillStyle = "white";
   ctx.textAlign = "center";
-  ctx.font = font(50);
+  ctx.font = font(fontLg);
   ctx.fillText(`Wave ${game.wave} Complete!`, game.screenWidth / 2, 100);
 
-  ctx.font = font(20);
-  ctx.fillText("Press any key to continue", game.screenWidth / 2, 250);
+  ctx.font = font(fontSm);
+  ctx.fillText("Press any key to continue", game.screenWidth / 2, game.screenHeight - 100);
 };
 
 const renderPauseScreen = () => {
@@ -168,16 +183,13 @@ const renderPauseScreen = () => {
 
   ctx.fillStyle = "white";
   ctx.textAlign = "center";
-  ctx.font = font(50);
+  ctx.font = font(fontLg);
   ctx.fillText("Game Paused", game.screenWidth / 2, 100);
 
-  ctx.font = font(30);
-  ctx.fillText("Instructions", game.screenWidth / 2, 160);
+  renderInstructions();
 
-  ctx.font = font(20);
-  ctx.fillText("Type the word which appears by the missile", game.screenWidth / 2, 200);
-  ctx.fillText("Press ENTER or SPACE to send the word", game.screenWidth / 2, 225);
-  ctx.fillText("Press any key to resume the game", game.screenWidth / 2, game.screenHeight - 100);
+  ctx.font = font(fontMed);
+  ctx.fillText("Press any key to resume", game.screenWidth / 2, game.screenHeight - 100);
 };
 
 const renderGameOverScreen = () => {
@@ -185,15 +197,15 @@ const renderGameOverScreen = () => {
 
   ctx.fillStyle = "white";
   ctx.textAlign = "center";
-  ctx.font = font(50);
+  ctx.font = font(fontLg);
   ctx.fillText("Game Over", game.screenWidth / 2, 100);
 
-  ctx.font = font(30);
+  ctx.font = font(fontMed);
   ctx.fillText("Final Score: " + game.score, game.screenWidth / 2, 160);
   ctx.fillText("Wave: " + game.wave, game.screenWidth / 2, 200);
 
-  ctx.font = font(20);
-  ctx.fillText("Press any key to play again", game.screenWidth / 2, 250);
+  ctx.font = font(fontSm);
+  ctx.fillText("Press any key to play again", game.screenWidth / 2, game.screenHeight - 100);
 };
 
 const renderMissiles = () => {
@@ -201,7 +213,7 @@ const renderMissiles = () => {
     ctx.drawImage(rocket, m.x - 12, m.y - 35);
 
     ctx.fillStyle = "black";
-    ctx.font = font(20);
+    ctx.font = font(fontSm - 4);
     ctx.textAlign = "center";
     ctx.fillText(m.code, m.x, m.y + m.height + 18);
 
@@ -220,11 +232,12 @@ const renderBackground = () => {
 };
 
 const renderHud = () => {
+  ctx.font = font(fontMed);
   ctx.fillStyle = "black";
   ctx.textAlign = "center";
   ctx.fillText(game.code, game.screenWidth / 2, game.screenHeight - 10);
 
-  ctx.font = font(20);
+  // ctx.font = font(20);
   ctx.textAlign = "left";
   ctx.fillStyle = "black";
   ctx.fillText(game.score, 0 + 50, game.screenHeight - 10);

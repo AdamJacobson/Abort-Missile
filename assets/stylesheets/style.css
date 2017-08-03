@@ -1,6 +1,15 @@
+@font-face {
+  font-family: PressStart;
+  src: url('../fonts/PressStart2P.ttf');
+}
+
 html {
-  font-family: "Exo 2", sans-serif;
+  font-family: PressStart, sans-serif;
   font-size: 24px;
+}
+
+body {
+  background-image: url('../images/boiler_plate.jpg');
 }
 
 h1 {

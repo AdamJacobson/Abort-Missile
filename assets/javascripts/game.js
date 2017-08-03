@@ -171,9 +171,12 @@ class Game {
   }
 
   pause() {
-    this.stage = Stages.PAUSED;
-    this.paused = true;
-    this.missiles.forEach((missile) => missile.pause());
+    // can't pause unless playing
+    if (this.stage === Stages.PLAYING) {
+      this.stage = Stages.PAUSED;
+      this.paused = true;
+      this.missiles.forEach((missile) => missile.pause());
+    }
   }
 
   unpause() {

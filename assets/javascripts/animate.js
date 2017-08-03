@@ -186,7 +186,7 @@ const renderPauseScreen = () => {
 
   renderInstructions();
 
-  ctx.font = font(fontMed);
+  ctx.font = font(fontSm);
   ctx.fillText("Press any key to resume", game.screenWidth / 2, game.screenHeight - 100);
 };
 

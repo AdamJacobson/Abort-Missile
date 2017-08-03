@@ -75,6 +75,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 document.addEventListener('DOMContentLoaded', () => {
   const game = new __WEBPACK_IMPORTED_MODULE_0__game__["a" /* default */]();
   setupButtons(game);
+
+  window.addEventListener('blur', () => {
+    game.pause();
+  });
 });
 
 const setupButtons = (game) => {
@@ -266,9 +270,12 @@ class Game {
   }
 
   pause() {
-    this.stage = __WEBPACK_IMPORTED_MODULE_0__stages__["c" /* PAUSED */];
-    this.paused = true;
-    this.missiles.forEach((missile) => missile.pause());
+    // can't pause unless playing
+    if (this.stage === __WEBPACK_IMPORTED_MODULE_0__stages__["d" /* PLAYING */]) {
+      this.stage = __WEBPACK_IMPORTED_MODULE_0__stages__["c" /* PAUSED */];
+      this.paused = true;
+      this.missiles.forEach((missile) => missile.pause());
+    }
   }
 
   unpause() {
@@ -817,7 +824,7 @@ const renderPauseScreen = () => {
 
   renderInstructions();
 
-  ctx.font = font(fontMed);
+  ctx.font = font(fontSm);
   ctx.fillText("Press any key to resume", game.screenWidth / 2, game.screenHeight - 100);
 };
 

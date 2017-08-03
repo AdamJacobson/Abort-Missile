@@ -90,6 +90,27 @@ div.show {
   box-sizing: border-box;
 }
 
+.question-mark {
+  font-family: serif;
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: white;
+  color: black;
+  border-radius: 100%;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 40px;
+  cursor: pointer;
+}
+
+a {
+  text-decoration: none;
+}
+
 ._25 {
   width: 25%;
 }

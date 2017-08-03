@@ -6,7 +6,7 @@ const fontMed = 24;
 const fontSm = 18;
 
 const buildingIcon = '\uf0f7';
-let canvas, ctx, rocket, city, game;
+let canvas, ctx, rocket, city, game, building;
 let impactExplosionSheet, airExplosionSheet;
 let activeSprites = [];
 
@@ -20,6 +20,7 @@ function render(g) {
   canvas = document.getElementById('canvas');
   ctx = canvas.getContext('2d');
 
+  building = document.getElementById('building');
   rocket = document.getElementById('rocket');
   city = document.getElementById('city');
 
@@ -256,15 +257,14 @@ const renderHud = () => {
   // ctx.font = font(20);
   ctx.textAlign = "left";
   ctx.fillStyle = "black";
-  ctx.fillText(game.score, 0 + 50, game.screenHeight - 10);
+  ctx.fillText(game.score, 25, game.screenHeight - 10);
 
   ctx.font = '20px FontAwesome';
   ctx.fillStyle = "black";
   ctx.textAlign = "left";
-  let life = 0;
-  while (life < game.lives) {
-    ctx.fillText(buildingIcon, game.screenWidth - 100 + (life * 30), game.screenHeight - 10);
-    life++;
+  for (let i = 0; i < game.lives; i++) {
+    ctx.drawImage(building, game.screenWidth - 130 + (i * 40), game.screenHeight - 40, 40, 40);
+    // ctx.fillText(buildingIcon, game.screenWidth - 100 + (i * 30), game.screenHeight - 10);
   }
 };
 

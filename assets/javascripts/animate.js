@@ -103,6 +103,10 @@ function renderFrame() {
       renderWaveCompleteScreen();
       clearSprites();
       break;
+
+    case Stages.GAME_COMPLETE:
+      renderGameCompleteScreen();
+      break;
   }
 
   window.requestAnimationFrame(() => renderFrame());
@@ -111,6 +115,22 @@ function renderFrame() {
 const renderOverlay = () => {
   ctx.fillStyle = "rgba(100, 100, 100, 0.7)";
   ctx.fillRect(0, 0, game.screenWidth, game.screenHeight);
+};
+
+const renderGameCompleteScreen = () => {
+  renderOverlay();
+
+  ctx.fillStyle = "white";
+  ctx.textAlign = "center";
+  ctx.font = font(50);
+  ctx.fillText("Thats the end!", game.screenWidth / 2, 100);
+
+  ctx.font = font(30);
+  ctx.fillText("Thanks for playing!", game.screenWidth / 2, 160);
+  ctx.fillText("Final Score: " + game.score, game.screenWidth / 2, 200);
+
+  ctx.font = font(20);
+  ctx.fillText("Press any key to play again", game.screenWidth / 2, 250);
 };
 
 const renderTitleScreen = () => {
@@ -178,7 +198,7 @@ const renderGameOverScreen = () => {
 
 const renderMissiles = () => {
   game.missiles.forEach((m) => {
-    ctx.drawImage(rocket, m.x - 10, m.y - 35);
+    ctx.drawImage(rocket, m.x - 12, m.y - 35);
 
     ctx.fillStyle = "black";
     ctx.font = font(20);

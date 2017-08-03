@@ -1,6 +1,7 @@
+import * as Stages from './stages';
 import Missile from './missile';
 import render from './animate';
-import * as Stages from './stages';
+import { waves, finalWave } from './waves';
 
 class Game {
   constructor() {
@@ -69,6 +70,12 @@ class Game {
           this.reset();
         }
         break;
+
+      case Stages.GAME_COMPLETE:
+        if (this._anyKey(keyCode)) {
+          this.reset();
+        }
+        break;
     }
   }
 
@@ -79,7 +86,6 @@ class Game {
   fireCode(code) {
     this.missiles.forEach((missile) => {
       if (code === missile.code) {
-        // this.destroy(missile);
         missile.destroyed = true;
       }
     });
@@ -102,31 +108,64 @@ class Game {
     if (this.lives === 0) {
       this.gameOver();
     } else if (this.missilesLeft === 0 && this.missiles.length === 0) {
-      this.endWave();
+      setTimeout(() => this.endWave(), 2000);
     }
   }
 
   nextWave() {
     this.wave++;
-    this.startWave();
+    if (this.wave <= finalWave) {
+      this.startWave();
+    } else {
+      this.stage = Stages.GAME_COMPLETE;
+    }
   }
 
   startWave() {
     this.stage = Stages.PLAYING;
-    this.missilesLeft = 10;
+    this.missilesLeft = 0;
     const missileInterval = 1500;
+
+    let w = waves[this.wave];
+    let incoming = [];
+    Object.keys(w).forEach(k => {
+      this.missilesLeft += w[k];
+      let i = 0;
+      while (i < w[k]) {
+        incoming.push(k);
+        i++;
+      }
+    });
+    incoming = this._shuffle(incoming);
+
+    console.log(incoming);
 
     this.gameLoop = setInterval(() => {
       if (!this.paused) {
         if (this.missilesLeft > 0) {
-          const missile = new Missile(this.screenWidth);
+          const missile = new Missile(this.screenWidth, incoming[0]);
           this.missiles.push(missile);
           missile.startFalling();
           this.missilesLeft--;
+          incoming = incoming.slice(1);
         }
       }
     }, missileInterval);
   }
+
+  _shuffle(array) {
+  let m = array.length, t, i;
+
+  while (m) {
+    i = Math.floor(Math.random() * m--);
+
+    t = array[m];
+    array[m] = array[i];
+    array[i] = t;
+  }
+
+  return array;
+}
 
   endWave() {
     this.stage = Stages.WAVE_WON;

@@ -122,4 +122,17 @@ switch (this.stage) {
     }
     break;
     . . .
+  }
 ```
+
+## Bonus features
+
+Time permitting, the following features will be added.
+
+**Score Keeping**: Maintain the current best score for the player.
+
+**Diversify enemy types**: Add special enemy type such as MIRVs which break into multiple smaller missiles.
+
+**Powerups**: Special items which appear and aren't dangerous but grant the player special abilities (extra lives, time slowing)
+
+**Difficulty**: More dynamic and better difficulty with variations in missile speed.

@@ -1,6 +1,6 @@
 # Abort Missile!
 
-A typing game based on Missile Command.
+_Abort Missile!_ is a typing game based on Missile Command.
 
 [live link](https://adamjacobson.github.io/Abort-Missile/)
 

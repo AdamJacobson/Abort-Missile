@@ -5,7 +5,7 @@ class Missile {
     this.code = randomWordByLength(wordLength);
     this.x = (Math.random() * (screenWidth - 50 - (5 * this.code.length))) + 25 + (2 * this.code.length);
     this.y = -90; // start off the screen
-    this.points = 100;
+    this.points = 25 * this.code.length;
 
     this.height = 50;
     this.width = 10;

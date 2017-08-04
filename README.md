@@ -125,7 +125,7 @@ switch (this.stage) {
   }
 ```
 
-## Bonus features
+## Future Additions
 
 Time permitting, the following features will be added.
 

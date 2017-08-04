@@ -223,7 +223,7 @@ class Game {
   startWave() {
     this.stage = __WEBPACK_IMPORTED_MODULE_0__stages__["d" /* PLAYING */];
     this.missilesLeft = 0;
-    const missileInterval = 1500;
+    const missileInterval = 1500 - (this.wave * 50);
 
     let w = __WEBPACK_IMPORTED_MODULE_3__waves__["b" /* waves */][this.wave];
     let incoming = [];

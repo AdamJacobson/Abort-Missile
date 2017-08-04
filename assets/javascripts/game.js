@@ -124,7 +124,7 @@ class Game {
   startWave() {
     this.stage = Stages.PLAYING;
     this.missilesLeft = 0;
-    const missileInterval = 1500;
+    const missileInterval = 1500 - (this.wave * 50);
 
     let w = waves[this.wave];
     let incoming = [];

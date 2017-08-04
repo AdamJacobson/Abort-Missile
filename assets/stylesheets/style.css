@@ -71,3 +71,16 @@ canvas {
 .linkedin {
   right: 100px;
 }
+
+@media (max-width: 900px) {
+  .float-btn {
+    position: fixed;
+    color: black;
+    bottom: 20px;
+    font-size: 12px;
+  }
+
+  .linkedin {
+    right: 60px;
+  }
+}

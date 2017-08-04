@@ -74,9 +74,6 @@ canvas {
 
 @media (max-width: 900px) {
   .float-btn {
-    position: fixed;
-    color: black;
-    bottom: 20px;
     font-size: 12px;
   }
 

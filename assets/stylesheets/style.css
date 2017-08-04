@@ -13,60 +13,13 @@ body {
   background-size: cover;
 }
 
-h1 {
-  font-size: 36px;
-}
-
 canvas {
   border: 5px ridge;
   margin: 20px;
 }
 
-input {
-  width: 70%;
-  border: 2px solid;
-  box-sizing: border-box;
-  font-size: 18px;
-}
-
-button {
-  border: 1px solid;
-  border-radius: 6px;
-  font-size: 18px;
-  margin: 0 5px;
-}
-
-div.show {
-  display: block;
-}
-
-.hide {
+.hidden {
   display: none;
-}
-
-.modal {
-  background: rgba(100, 100, 100, .5);
-  display: none;
-}
-
-.modal-content {
-  margin: 50px;
-  background: white;
-  border-radius: 6px;
-  border: 1px solid #c3c4c5;
-}
-
-.mask {
-  background: rgba(100, 100, 100, .5);
-  width: 100%;
-  height: 100%;
-  position: fixed;
-  top: 0;
-  left: 0;
-}
-
-.game {
-  margin: 10px;
 }
 
 .content {
@@ -76,48 +29,20 @@ div.show {
   padding: 20px;
 }
 
-.buttons-row {
-  display: flex;
-  justify-content: center;
-}
-
-.bottom-row {
-  font-size: 30px;
-  display: flex;
-  flex-direction: row;
-  width: 100%;
-  justify-content: space-between;
-  padding: 5px 20px;
-  box-sizing: border-box;
-}
-
-.question-mark {
-  font-family: serif;
+.float-btn {
   position: fixed;
-  bottom: 20px;
-  right: 20px;
-  background: white;
   color: black;
-  border-radius: 100%;
-  width: 50px;
-  height: 50px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 40px;
-  cursor: pointer;
+  bottom: 20px;
 }
 
-a {
-  text-decoration: none;
+.float-btn:hover {
+  color: blue;
 }
 
-._25 {
-  width: 25%;
+.github {
+  right: 20px;
 }
 
-._50 {
-  display: flex;
-  justify-content: center;
-  width: 50%;
+.linkedin {
+  right: 100px;
 }

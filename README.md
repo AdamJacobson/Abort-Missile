@@ -70,3 +70,8 @@ The following script files will be needed:
 **Diversify enemy types**: Add special enemy type such as MIRVs which break into multiple smaller missiles.
 
 **Powerups**: Special items which appear and aren't dangerous but grant the player special abilites (extra lives, time slowing)
+
+## Feedback
+Long words can go off the screen
+Make it harder: Maybe less time between missiles
+Change background image

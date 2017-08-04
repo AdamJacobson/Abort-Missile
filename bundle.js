@@ -305,9 +305,9 @@ class Game {
 
 class Missile {
   constructor(screenWidth, wordLength) {
-    this.x = Math.random() * (screenWidth - 50) + 25;
-    this.y = -90; // start off the screen
     this.code = Object(__WEBPACK_IMPORTED_MODULE_0__random_words__["a" /* default */])(wordLength);
+    this.x = (Math.random() * (screenWidth - 50 - (5 * this.code.length))) + 25 + (2 * this.code.length);
+    this.y = -90; // start off the screen
     this.points = 100;
 
     this.height = 50;
@@ -874,7 +874,7 @@ const renderMissiles = () => {
 
     if (m.didImpact(canvas.height)) {
       game.impact(m);
-      newSprite(impactExplosionOptions(m.x - m.width - 60, m.y - m.height - 40));
+      newSprite(impactExplosionOptions(m.x - m.width - 55, m.y - m.height - 40));
     } else if (m.destroyed) {
       game.destroy(m);
       newSprite(airExplosionOptions(m.x - m.width - 55, m.y - m.height - 45));

@@ -9,7 +9,7 @@ html {
 }
 
 body {
-  background-image: url('../images/control_panel.jpg');
+  background-image: url('../images/control_panel_2.jpg');
   background-size: cover;
 }
 
@@ -22,7 +22,8 @@ canvas {
   padding: 30px;
   margin: 20px;
   border-radius: 6px;
-  background-image: url('../images/metal_2.jpg');
+  background-image: url('../images/metal_5.jpg');
+  box-shadow: 5px 5px #9a9a9a;
 }
 
 .screw {

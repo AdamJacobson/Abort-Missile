@@ -21,3 +21,105 @@ The player withstand only 3 strikes before the game ends. The game is played in 
 - There are 10 waves with the words required to be type becoming longer each wave.
 
 ## Screenshots
+
+![welcome](https://github.com/AdamJacobson/Abort-Missile/blob/master/docs/images/welcome.JPG)
+
+![typing](https://github.com/AdamJacobson/Abort-Missile/blob/master/docs/images/typing.JPG)
+
+![exploding](https://github.com/AdamJacobson/Abort-Missile/blob/master/docs/images/explode.JPG)
+
+## Technologies and Architecture
+
+- Vanilla JavaScript for structure. ES6 classes will be used.
+- HTML5 vanilla canvas with no libraries.
+- Webpack to bundle javascript files.
+
+`app.js` just does initial setup of the game
+
+`game.js` which will hold the game state, user lives, score and all active missiles. It will also handle user input and manage the stage of the game.
+
+`random_words.js` holds a library of words organized by length.
+
+`missile.js` which represents one missile. Has the code associated with it, a point value and current location on the screen.
+
+`animate.js` will contain the canvas code for rendering the game based on the current stage. It will manage and keep track of all active sprite animations.
+
+`sprite.js` defines a sprite based on a sprite sheet in order to create frame based animations
+
+`stages.js` is just a collection of `consts`'s which represent the stage of the game
+
+## Code Snippets
+
+The game logic uses a Stages pattern in order to determine the functionality at any particular moment. Stages are simply defined as constant numerals.
+
+```javascript
+// stages.js
+export const NOT_STARTED = 0;
+export const PLAYING = 1;
+export const PAUSED = 2;
+export const WAVE_WON = 3;
+export const WAVE_LOST = 4;
+export const GAME_COMPLETE = 5;
+```
+
+Animation logic checks the stage in order to determine the correct items to render to the cavas.
+
+```javascript
+// animate.js
+function renderFrame() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  renderBackground();
+
+  switch (game.stage) {
+    case Stages.NOT_STARTED:
+      renderTitleScreen();
+      break;
+
+    case Stages.PLAYING:
+      renderSprites();
+      renderMissiles();
+      renderHud();
+      break;
+
+    case Stages.PAUSED:
+      renderPauseScreen();
+      break;
+
+    case Stages.WAVE_LOST:
+      renderGameOverScreen();
+      clearSprites();
+      break;
+
+    case Stages.WAVE_WON:
+      renderWaveCompleteScreen();
+      clearSprites();
+      break;
+
+    case Stages.GAME_COMPLETE:
+      renderGameCompleteScreen();
+      break;
+  }
+
+  window.requestAnimationFrame(() => renderFrame());
+}
+```
+
+Game logic uses stages to determine the results of user input.
+
+```javascript
+// game.js
+switch (this.stage) {
+  case Stages.NOT_STARTED:
+    if (this._anyKey(keyCode)) {
+      this.nextWave();
+    }
+    break;
+
+  case Stages.PAUSED:
+    if (this._anyKey(keyCode)) {
+      this.unpause();
+    }
+    break;
+    . . .
+```

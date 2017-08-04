@@ -14,8 +14,32 @@ body {
 }
 
 canvas {
-  border: 5px ridge;
+  border: 5px inset;
+}
+
+.panel {
+  position: relative;
+  padding: 30px;
   margin: 20px;
+  border-radius: 6px;
+  background-image: url('../images/metal_2.jpg');
+}
+
+.screw {
+  position: absolute;
+}
+
+.left {
+  left: 6px;
+}
+.right {
+  right: 6px;
+}
+.upper {
+  top: 6px;
+}
+.lower {
+  bottom: 6px;
 }
 
 .hidden {

@@ -1,5 +1,6 @@
-// Borrowed from random-words by Punkave which borrowed from
-// xkcd password generator which borrowed it from wherever
+// Word list taken from random-words by Punkave
+// https://github.com/punkave/random-words
+// Reorganized by me into the following format
 
 const words = {
   3: [

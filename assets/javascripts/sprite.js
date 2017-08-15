@@ -1,3 +1,5 @@
+// Code heavily based on http://www.williammalone.com/articles/create-html5-canvas-javascript-sprite-animation/
+
 const sprite = (options) => {
   let that = {},
     frameIndex = 0,
